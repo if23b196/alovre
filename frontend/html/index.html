@@ -42,11 +42,11 @@
         </div>
 
         <div id="upload-document-section">
-            <input type="file" id="file-upload" class="hidden" accept=".pdf,.txt">
+            <input type="file" id="file-upload" class="hidden" accept=".pdf,.doc,.docx,.txt">
             <div class="dropzone" id="dropzone">
                 <i data-lucide="upload" class="upload-icon"></i>
                 <p>Click to upload or drag and drop</p>
-                <span class="file-hint">PDF or TXT files</span>
+                <span class="file-hint">PDF, DOCX files</span>
             </div>
         </div>
 
@@ -58,19 +58,27 @@
         </div>
     </section>
 
-    <section class="library-container">
-        <h2 class="card-title library-title">Your Library</h2>
+    <section class="card library-card">
+        <div class="library-header-row">
+            <div class="library-title-group">
+                <h2 class="card-title library-title">Your Library</h2>
+                <p id="item-count" class="item-count">0 items</p>
+            </div>
+
+            <button id="toggle-delete-mode-btn" class="btn-icon" aria-label="Toggle Delete Mode" title="Toggle Delete Mode">
+                <i data-lucide="trash-2"></i>
+            </button>
+        </div>
 
         <div class="search-bar">
             <i data-lucide="search" class="search-icon"></i>
-            <input type="text" id="search-input" placeholder="Search content name...">
+            <input type="text" id="search-input" placeholder="Search your library...">
         </div>
 
-        <div class="card table-card">
+        <div class="table-container">
             <div id="empty-state" class="empty-state">
                 <i data-lucide="file-x-2" class="empty-icon"></i>
-                <p>No documents uploaded yet.</p>
-                <p>Upload your first document to get started.</p>
+                <p>No documents uploaded yet. Upload your first document to get started.</p>
             </div>
 
             <table id="library-table" class="hidden">
@@ -81,7 +89,7 @@
                     <th>Date</th>
                     <th>Size</th>
                     <th>Status</th>
-                </tr>
+                    <th></th> </tr>
                 </thead>
                 <tbody id="library-body">
                 </tbody>
@@ -89,6 +97,32 @@
         </div>
     </section>
 </main>
+
+<div id="edit-modal" class="modal hidden">
+    <div class="modal-content card">
+        <h3 class="card-title modal-title">
+            <i data-lucide="pencil" class="modal-icon"></i> Edit Content Name
+        </h3>
+        <input type="text" id="edit-name-input" placeholder="Enter new name...">
+        <div class="modal-actions">
+            <button id="cancel-edit-btn" class="btn-secondary">Cancel</button>
+            <button id="save-edit-btn" class="btn-primary">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal hidden">
+    <div class="modal-content card">
+        <h3 class="card-title text-destructive modal-title">
+            <i data-lucide="alert-triangle" class="modal-icon"></i> Delete Content
+        </h3>
+        <p>Are you sure you want to delete "<strong id="delete-item-name"></strong>"? This cannot be undone.</p>
+        <div class="modal-actions">
+            <button id="cancel-delete-btn" class="btn-secondary">Cancel</button>
+            <button id="confirm-delete-btn" class="btn-destructive">Delete</button>
+        </div>
+    </div>
+</div>
 
 <script src="../js/script.js"></script>
 </body>
