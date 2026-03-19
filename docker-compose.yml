@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  # -------------------------------
+  # 1. PostgreSQL Database
+  # -------------------------------
+  postgres:
+    image: postgres:15
+    container_name: postgres
+
+    environment:
+      POSTGRES_DB: readingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # -------------------------------
+  # 2. MinIO (Object Storage)
+  # -------------------------------
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    volumes:
+      - minio_data:/data
+
+    command: server /data --console-address ":9001"
+
+    restart: always
+
+  # -------------------------------
+  # 3. Backend (Spring Boot)
+  # -------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: backend
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/readingdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+      # MinIO config
+      MINIO_URL: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: documents
+
+    depends_on:
+      - postgres
+      - minio
+
+  # -------------------------------
+  # 4. Frontend (NGINX)
+  # -------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: frontend
+
+    ports:
+      - "8081:80"
+
+    depends_on:
+      - backend
+
+# -------------------------------
+# Volumes
+# -------------------------------
+volumes:
+  pgdata:
+  minio_data:
