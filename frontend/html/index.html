@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alovre - Reading App</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <i data-lucide="book-open" class="icon-brand"></i>
+        <span>alovre</span>
+    </div>
+    <button id="theme-toggle" aria-label="Toggle Dark Mode">
+        <i data-lucide="moon" id="theme-icon"></i>
+    </button>
+</nav>
+
+<main class="container">
+    <header class="hero-section">
+        <h1>Your quiet corner for reading.</h1>
+        <p>Upload your documents or plain text, immerse yourself in distraction-free reading, and unlock intelligent insights.</p>
+    </header>
+
+    <section class="card">
+        <h2 class="card-title">Upload Content</h2>
+
+        <div class="input-group">
+            <label for="content-name">Content Name</label>
+            <input type="text" id="content-name" placeholder="Enter a name for your content">
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="document">
+                <i data-lucide="file-text"></i> Document
+            </button>
+            <button class="tab" data-tab="plaintext">
+                <i data-lucide="align-left"></i> Plain Text
+            </button>
+        </div>
+
+        <div id="upload-document-section">
+            <input type="file" id="file-upload" class="hidden" accept=".pdf,.txt">
+            <div class="dropzone" id="dropzone">
+                <i data-lucide="upload" class="upload-icon"></i>
+                <p>Click to upload or drag and drop</p>
+                <span class="file-hint">PDF or TXT files</span>
+            </div>
+        </div>
+
+        <div id="upload-text-section" class="hidden">
+            <textarea id="text-input" placeholder="Type or paste your plain text here..." rows="6"></textarea>
+            <button id="upload-text-btn" class="btn-primary">
+                <i data-lucide="upload-cloud"></i> Upload Text
+            </button>
+        </div>
+    </section>
+
+    <section class="library-container">
+        <h2 class="card-title library-title">Your Library</h2>
+
+        <div class="search-bar">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="search-input" placeholder="Search content name...">
+        </div>
+
+        <div class="card table-card">
+            <div id="empty-state" class="empty-state">
+                <i data-lucide="file-x-2" class="empty-icon"></i>
+                <p>No documents uploaded yet.</p>
+                <p>Upload your first document to get started.</p>
+            </div>
+
+            <table id="library-table" class="hidden">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Size</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="library-body">
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="../js/script.js"></script>
+</body>
+</html>
