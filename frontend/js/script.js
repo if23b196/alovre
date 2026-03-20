@@ -39,12 +39,40 @@ const dropzone = document.getElementById('dropzone');
 const fileUploadInput = document.getElementById('file-upload');
 const uploadTextBtn = document.getElementById('upload-text-btn');
 const contentNameInput = document.getElementById('content-name');
+const nameError = document.getElementById('name-error');
 const textInput = document.getElementById('text-input');
+const textError = document.getElementById('text-error');
 
 const libraryTable = document.getElementById('library-table');
 const libraryBody = document.getElementById('library-body');
 const emptyState = document.getElementById('empty-state');
 const itemCountText = document.getElementById('item-count');
+
+// Validation functions
+function validateContentName() {
+    const name = contentNameInput.value.trim();
+    if (!name) {
+        nameError.classList.remove('hidden');
+        contentNameInput.style.borderColor = 'var(--destructive)';
+        return false;
+    }
+    return name;
+}
+
+// Clear error states when user starts typing
+contentNameInput.addEventListener('input', () => {
+    if (contentNameInput.value.trim()) {
+        nameError.classList.add('hidden');
+        contentNameInput.style.borderColor = '';
+    }
+});
+
+textInput.addEventListener('input', () => {
+    if (textInput.value.trim()) {
+        textError.classList.add('hidden');
+        textInput.style.borderColor = '';
+    }
+});
 
 function getCurrentDate() {
     return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -55,7 +83,6 @@ function formatSize(bytes) {
     return (bytes / 1024).toFixed(1) + ' KB';
 }
 
-// Dynamically updates the small text showing total items
 function updateItemCount() {
     const count = libraryBody.children.length;
     if (count === 1) {
@@ -69,8 +96,6 @@ function checkEmptyState() {
     if (libraryBody.children.length === 0) {
         emptyState.classList.remove('hidden');
         libraryTable.classList.add('hidden');
-        // Auto-turn off delete mode if table is empty
-        if (isDeleteMode) toggleDeleteMode();
     } else {
         emptyState.classList.add('hidden');
         libraryTable.classList.remove('hidden');
@@ -104,27 +129,40 @@ function addContentToTable(name, type, sizeStr) {
         </td>
     `;
 
+    // Append so the newest item goes to the top
     libraryBody.prepend(tr);
     lucide.createIcons();
     checkEmptyState();
 }
 
-// Upload triggers
-dropzone.addEventListener('click', () => fileUploadInput.click());
+// Upload triggers with validation
+dropzone.addEventListener('click', () => {
+    if (!validateContentName()) return;
+    fileUploadInput.click();
+});
 
 fileUploadInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    let name = contentNameInput.value.trim() || file.name.split('.')[0];
+    const name = validateContentName();
+    if (!name) return;
+
     addContentToTable(name, file.name, formatSize(file.size));
     contentNameInput.value = '';
     fileUploadInput.value = '';
 });
 
 uploadTextBtn.addEventListener('click', () => {
+    const name = validateContentName();
+    if (!name) return;
+
     const text = textInput.value.trim();
-    if (!text) { alert("Please enter some text first."); return; }
-    let name = contentNameInput.value.trim() || "Untitled Text";
+    if (!text) {
+        textError.classList.remove('hidden');
+        textInput.style.borderColor = 'var(--destructive)';
+        return;
+    }
+
     addContentToTable(name, 'Plain Text', formatSize(new Blob([text]).size));
     contentNameInput.value = '';
     textInput.value = '';
@@ -142,22 +180,6 @@ searchInput.addEventListener('input', (e) => {
 });
 
 // --- 5. Edit and Delete Functionality ---
-let isDeleteMode = false;
-const toggleDeleteBtn = document.getElementById('toggle-delete-mode-btn');
-
-// Toggle Delete Mode Styling
-function toggleDeleteMode() {
-    isDeleteMode = !isDeleteMode;
-    if (isDeleteMode) {
-        libraryTable.classList.add('delete-mode');
-        toggleDeleteBtn.classList.add('active'); // Adds the strong red background
-    } else {
-        libraryTable.classList.remove('delete-mode');
-        toggleDeleteBtn.classList.remove('active'); // Returns to default styling
-    }
-}
-toggleDeleteBtn.addEventListener('click', toggleDeleteMode);
-
 // Modal Variables
 let activeRow = null;
 const editModal = document.getElementById('edit-modal');

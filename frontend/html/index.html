@@ -30,6 +30,7 @@
         <div class="input-group">
             <label for="content-name">Content Name</label>
             <input type="text" id="content-name" placeholder="Enter a name for your content">
+            <span id="name-error" class="error-text hidden">Please provide a name for your content first.</span>
         </div>
 
         <div class="tabs">
@@ -51,7 +52,10 @@
         </div>
 
         <div id="upload-text-section" class="hidden">
-            <textarea id="text-input" placeholder="Type or paste your plain text here..." rows="6"></textarea>
+            <div class="input-group" style="margin-bottom: 0;">
+                <textarea id="text-input" placeholder="Type or paste your plain text here..." rows="6"></textarea>
+                <span id="text-error" class="error-text hidden">Please enter some text before uploading.</span>
+            </div>
             <button id="upload-text-btn" class="btn-primary">
                 <i data-lucide="upload-cloud"></i> Upload Text
             </button>
@@ -64,10 +68,6 @@
                 <h2 class="card-title library-title">Your Library</h2>
                 <p id="item-count" class="item-count">0 items</p>
             </div>
-
-            <button id="toggle-delete-mode-btn" class="btn-icon" aria-label="Toggle Delete Mode" title="Toggle Delete Mode">
-                <i data-lucide="trash-2"></i>
-            </button>
         </div>
 
         <div class="search-bar">
@@ -89,7 +89,8 @@
                     <th>Date</th>
                     <th>Size</th>
                     <th>Status</th>
-                    <th></th> </tr>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody id="library-body">
                 </tbody>
