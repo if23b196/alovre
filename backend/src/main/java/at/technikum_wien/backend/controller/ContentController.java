@@ -1,5 +1,6 @@
 package at.technikum_wien.backend.controller;
 
+import at.technikum_wien.backend.dto.content.UploadTextRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -37,9 +38,15 @@ public class ContentController {
 
     // 2. Upload raw text
     @PostMapping("/upload/text")
-    public void uploadText(@RequestParam("title") String title,
-                           @RequestParam("text") String text) {
-        // TODO: implement text upload
+    public ResponseEntity<Content> uploadText(
+            @Valid @RequestBody UploadTextRequest request) {
+
+        Content saved = contentService.uploadText(
+                request.getTitle(),
+                request.getText()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     // 3. Retrieve all content metadata

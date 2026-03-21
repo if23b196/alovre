@@ -84,4 +84,18 @@ public class ContentService {
             log.error("Error processing document with ID {}", contentId, e);
         }
     }
+
+    public Content uploadText(String title, String text) {
+
+        Content content = new Content();
+        content.setTitle(title);
+        content.setType(Content.ContentType.TEXT);
+        content.setTextContent(text);
+        content.setUploadTimestamp(LocalDateTime.now());
+
+        // No file-related fields needed
+        content.setOcrProcessed(true); // already "processed"
+
+        return contentRepository.save(content);
+    }
 }
