@@ -1,17 +1,38 @@
 package at.technikum_wien.backend.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+
+import at.technikum_wien.backend.dto.content.UploadDocumentRequest;
+import at.technikum_wien.backend.model.Content;
+import at.technikum_wien.backend.service.ContentService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/content")
+@RequiredArgsConstructor
 public class ContentController {
 
-    // 1. Upload a PDF or TXT document
+    private final ContentService contentService;
+
     @PostMapping("/upload/document")
-    public void uploadDocument(@RequestParam("file") MultipartFile file) {
-        // TODO: implement document upload
+    public ResponseEntity<Content> uploadDocument(
+            @Valid @ModelAttribute UploadDocumentRequest request) {
+
+        if (request.getFile().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Content saved = contentService.uploadDocument(
+                request.getTitle(),
+                request.getFile()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     // 2. Upload raw text
