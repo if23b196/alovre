@@ -1,5 +1,6 @@
 package at.technikum_wien.backend.service;
 
+import at.technikum_wien.backend.dto.content.ContentListResponse;
 import at.technikum_wien.backend.model.Content;
 import at.technikum_wien.backend.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -97,5 +99,20 @@ public class ContentService {
         content.setOcrProcessed(true); // already "processed"
 
         return contentRepository.save(content);
+    }
+
+    public List<ContentListResponse> getAllContent() {
+
+        return contentRepository.findAll()
+                .stream()
+                .map(content -> new ContentListResponse(
+                        content.getId(),
+                        content.getTitle(),
+                        content.getType(),
+                        content.getFileSize(),
+                        content.getUploadTimestamp(),
+                        content.getOcrProcessed()
+                ))
+                .toList();
     }
 }

@@ -9,122 +9,27 @@
 </head>
 <body>
 <nav class="navbar">
-    <div class="logo">
+    <a href="index.html" class="logo">
         <i data-lucide="book-open" class="icon-brand"></i>
         <span>alovre</span>
+    </a>
+    <div class="nav-actions">
+        <a href="upload.html" class="nav-btn"><i data-lucide="upload"></i> Upload</a>
+        <a href="library.html" class="nav-btn"><i data-lucide="library"></i> Library</a>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+            <i data-lucide="moon" id="theme-icon"></i>
+        </button>
     </div>
-    <button id="theme-toggle" aria-label="Toggle Dark Mode">
-        <i data-lucide="moon" id="theme-icon"></i>
-    </button>
 </nav>
 
 <main class="container">
-    <header class="hero-section">
+    <header class="hero-section" style="margin-top: 4rem;">
         <h1>Your quiet corner for reading.</h1>
-        <p>Upload your documents or plain text, immerse yourself in distraction-free reading, and unlock intelligent insights.</p>
+        <p>Upload your documents or plain text, immerse yourself in distraction-free reading, and unlock intelligent
+            insights.</p>
     </header>
-
-    <section class="card">
-        <h2 class="card-title">Upload Content</h2>
-
-        <div class="input-group">
-            <label for="content-name">Content Name</label>
-            <input type="text" id="content-name" placeholder="Enter a name for your content">
-            <span id="name-error" class="error-text hidden">Please provide a name for your content first.</span>
-        </div>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="document">
-                <i data-lucide="file-text"></i> Document
-            </button>
-            <button class="tab" data-tab="plaintext">
-                <i data-lucide="align-left"></i> Plain Text
-            </button>
-        </div>
-
-        <div id="upload-document-section">
-            <input type="file" id="file-upload" class="hidden" accept=".pdf,.doc,.docx,.txt">
-            <div class="dropzone" id="dropzone">
-                <i data-lucide="upload" class="upload-icon"></i>
-                <p>Click to upload or drag and drop</p>
-                <span class="file-hint">PDF, DOCX files</span>
-            </div>
-        </div>
-
-        <div id="upload-text-section" class="hidden">
-            <div class="input-group" style="margin-bottom: 0;">
-                <textarea id="text-input" placeholder="Type or paste your plain text here..." rows="6"></textarea>
-                <span id="text-error" class="error-text hidden">Please enter some text before uploading.</span>
-            </div>
-            <button id="upload-text-btn" class="btn-primary">
-                <i data-lucide="upload-cloud"></i> Upload Text
-            </button>
-        </div>
-    </section>
-
-    <section class="card library-card">
-        <div class="library-header-row">
-            <div class="library-title-group">
-                <h2 class="card-title library-title">Your Library</h2>
-                <p id="item-count" class="item-count">0 items</p>
-            </div>
-        </div>
-
-        <div class="search-bar">
-            <i data-lucide="search" class="search-icon"></i>
-            <input type="text" id="search-input" placeholder="Search your library...">
-        </div>
-
-        <div class="table-container">
-            <div id="empty-state" class="empty-state">
-                <i data-lucide="file-x-2" class="empty-icon"></i>
-                <p>No documents uploaded yet. Upload your first document to get started.</p>
-            </div>
-
-            <table id="library-table" class="hidden">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Date</th>
-                    <th>Size</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody id="library-body">
-                </tbody>
-            </table>
-        </div>
-    </section>
 </main>
 
-<div id="edit-modal" class="modal hidden">
-    <div class="modal-content card">
-        <h3 class="card-title modal-title">
-            <i data-lucide="pencil" class="modal-icon"></i> Edit Content Name
-        </h3>
-        <input type="text" id="edit-name-input" placeholder="Enter new name...">
-        <div class="modal-actions">
-            <button id="cancel-edit-btn" class="btn-secondary">Cancel</button>
-            <button id="save-edit-btn" class="btn-primary">Save Changes</button>
-        </div>
-    </div>
-</div>
-
-<div id="delete-modal" class="modal hidden">
-    <div class="modal-content card">
-        <h3 class="card-title text-destructive modal-title">
-            <i data-lucide="alert-triangle" class="modal-icon"></i> Delete Content
-        </h3>
-        <p>Are you sure you want to delete "<strong id="delete-item-name"></strong>"? This cannot be undone.</p>
-        <div class="modal-actions">
-            <button id="cancel-delete-btn" class="btn-secondary">Cancel</button>
-            <button id="confirm-delete-btn" class="btn-destructive">Delete</button>
-        </div>
-    </div>
-</div>
-
-<script src="../js/script.js"></script>
+<script src="../js/common.js"></script>
 </body>
 </html>

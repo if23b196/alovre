@@ -61,8 +61,8 @@ body { background-color: var(--background); color: var(--foreground); transition
 .hidden { display: none !important; }
 
 /* Navbar */
-.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid var(--border); background-color: var(--card); }
-.logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; color: var(--primary); font-weight: 500; }
+/*.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid var(--border); background-color: var(--card); }*/
+/*.logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; color: var(--primary); font-weight: 500; }*/
 #theme-toggle { background: transparent; border: none; color: var(--primary); cursor: pointer; padding: 0.5rem; border-radius: 50%; transition: background-color 0.2s; }
 #theme-toggle:hover { background-color: var(--secondary); }
 
@@ -184,3 +184,70 @@ tr:last-child td:last-child { border-bottom-right-radius: 1rem; }
 .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; }
 .modal-actions button { margin-top: 0; width: auto; }
 .text-destructive { color: var(--destructive); }
+
+/* Update Navbar styles for the new buttons */
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid var(--border); background-color: var(--card); }
+.logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; color: var(--primary); font-weight: 500; text-decoration: none; }
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.nav-btn { text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.95rem; border-radius: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; transition: all 0.2s; }
+
+/* Adjust anchor buttons to match your button variables */
+a.btn-primary { background-color: var(--primary); color: var(--primary-foreground); }
+a.btn-primary:hover { opacity: 0.9; }
+a.btn-secondary { background-color: var(--secondary); color: var(--secondary-foreground); }
+a.btn-secondary:hover { background-color: var(--muted); }
+
+/* --- Navbar Buttons Fix --- */
+.nav-btn {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    text-decoration: none;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.95rem;
+    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: none;
+}
+
+.nav-btn:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+/* --- Elegant Notifications (Toasts) --- */
+.toast-wrapper {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-wrapper.hidden {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+    pointer-events: none;
+}
+
+.toast {
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.toast.info { background-color: var(--primary); color: var(--primary-foreground); }
+.toast.success { background-color: #2e7d32; color: #ffffff; } /* Green */
+.toast.error { background-color: var(--destructive); color: var(--destructive-foreground); }
+
+/* Spinning animation for the loader icon */
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }

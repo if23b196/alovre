@@ -1,5 +1,6 @@
 package at.technikum_wien.backend.controller;
 
+import at.technikum_wien.backend.dto.content.ContentListResponse;
 import at.technikum_wien.backend.dto.content.UploadTextRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -11,7 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/content")
@@ -51,9 +51,11 @@ public class ContentController {
 
     // 3. Retrieve all content metadata
     @GetMapping
-    public List<Object> getAllContent() {
-        // TODO: return list of content (DTO)
-        return null;
+    public ResponseEntity<List<ContentListResponse>> getAllContent() {
+
+        List<ContentListResponse> contentList = contentService.getAllContent();
+
+        return ResponseEntity.ok(contentList);
     }
 
     // 7. Retrieve single content by ID

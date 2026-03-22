@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alovre - Upload</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<nav class="navbar">
+    <a href="index.html" class="logo">
+        <i data-lucide="book-open" class="icon-brand"></i>
+        <span>alovre</span>
+    </a>
+    <div class="nav-actions">
+        <a href="upload.html" class="nav-btn"><i data-lucide="upload"></i> Upload</a>
+        <a href="library.html" class="nav-btn"><i data-lucide="library"></i> Library</a>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+            <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+    </div>
+</nav>
+
+<main class="container">
+    <section class="card">
+        <h2 class="card-title">Upload Content</h2>
+
+        <div class="input-group">
+            <label for="content-name">Content Name</label>
+            <input type="text" id="content-name" placeholder="Enter a name for your content">
+            <span id="name-error" class="error-text hidden">Please provide a name for your content first.</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="document">
+                <i data-lucide="file-text"></i> Document
+            </button>
+            <button class="tab" data-tab="plaintext">
+                <i data-lucide="align-left"></i> Plain Text
+            </button>
+        </div>
+
+        <div id="upload-document-section">
+            <input type="file" id="file-upload" class="hidden" accept=".pdf,.doc,.docx,.txt">
+            <div class="dropzone" id="dropzone">
+                <i data-lucide="upload" class="upload-icon"></i>
+                <p>Click to upload or drag and drop</p>
+                <span class="file-hint">PDF, DOCX files</span>
+            </div>
+        </div>
+
+        <div id="upload-text-section" class="hidden">
+            <div class="input-group" style="margin-bottom: 0;">
+                <textarea id="text-input" placeholder="Type or paste your plain text here..." rows="6"></textarea>
+                <span id="text-error" class="error-text hidden">Please enter some text before uploading.</span>
+            </div>
+            <button id="upload-text-btn" class="btn-primary">
+                <i data-lucide="upload-cloud"></i> Upload Text
+            </button>
+        </div>
+    </section>
+</main>
+
+<div id="toast-container" class="toast-wrapper hidden">
+    <div id="toast-message" class="toast"></div>
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/upload.js"></script>
+</body>
+</html>

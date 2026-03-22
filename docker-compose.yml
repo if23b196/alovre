@@ -91,3 +91,4 @@ services:
 volumes:
   pgdata:
   minio_data:
+
