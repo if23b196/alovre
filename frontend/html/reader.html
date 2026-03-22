@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alovre - Reader</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="reader-mode"> <nav class="navbar">
+    <a href="index.html" class="logo">
+        <i data-lucide="book-open" class="icon-brand"></i>
+        <span>alovre</span>
+    </a>
+    <div class="nav-actions">
+        <a href="upload.html" class="nav-btn"><i data-lucide="upload"></i> Upload</a>
+        <a href="library.html" class="nav-btn"><i data-lucide="library"></i> Library</a>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+            <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+    </div>
+</nav>
+
+<main class="reader-layout">
+    <section class="content-panel">
+        <div class="reader-header">
+            <a href="library.html" class="btn-icon" title="Back to Library">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            <h2 id="document-title" class="reader-title">Jason Bourne - Summary</h2>
+        </div>
+
+        <div class="reader-body card">
+            <div id="text-content" class="text-content"></div>
+        </div>
+    </section>
+
+    <section class="tools-panel">
+        <div class="selected-word-display card">
+            <p id="selected-word-text" class="text-muted">Select a word to use AI tools</p>
+        </div>
+
+        <div class="tool-card card">
+            <div class="tool-header-row">
+                <button id="btn-translate" class="tool-trigger-btn">
+                    <i data-lucide="languages"></i> Translation
+                </button>
+                <div class="pagination hidden" id="translate-pagination">
+                    <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>
+                    <span class="page-counter">1 / 1</span>
+                    <button class="page-btn next-btn"><i data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="tool-content">
+                <div id="translate-result" class="result-area empty">No translations yet</div>
+            </div>
+        </div>
+
+        <div class="tool-card card">
+            <div class="tool-header-row">
+                <button id="btn-image" class="tool-trigger-btn">
+                    <i data-lucide="image"></i> Image
+                </button>
+                <div class="pagination hidden" id="image-pagination">
+                    <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>
+                    <span class="page-counter">1 / 1</span>
+                    <button class="page-btn next-btn"><i data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="tool-content">
+                <div id="image-result" class="result-area empty">No images yet</div>
+            </div>
+        </div>
+
+        <div class="tool-card card">
+            <div class="tool-header-row">
+                <button id="btn-audio" class="tool-trigger-btn">
+                    <i data-lucide="volume-2"></i> Text-to-Speech
+                </button>
+                <div class="pagination hidden" id="audio-pagination">
+                    <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>
+                    <span class="page-counter">1 / 1</span>
+                    <button class="page-btn next-btn"><i data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="tool-content">
+                <div id="audio-result" class="result-area empty">No audio yet</div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="toast-container" class="toast-wrapper hidden">
+    <div id="toast-message" class="toast"></div>
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/reader.js"></script>
+</body>
+</html>

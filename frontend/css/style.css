@@ -251,3 +251,159 @@ a.btn-secondary:hover { background-color: var(--muted); }
 /* Spinning animation for the loader icon */
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- Reader Layout (Independent Scrolling & Fixed Height) --- */
+body.reader-mode {
+    height: 100vh;
+    overflow: hidden; /* Prevents the whole page from scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+body.reader-mode .navbar {
+    flex-shrink: 0; /* Ensures navbar never shrinks */
+}
+
+.reader-layout {
+    display: flex;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    flex: 1; /* Takes up the remaining height under the navbar */
+    overflow: hidden; /* Contains the scrollable children */
+    width: 100%;
+}
+
+/* Scrollable Panels */
+.content-panel { flex: 6; }
+.tools-panel { flex: 4; display: flex; flex-direction: column; gap: 1.25rem; }
+
+.content-panel, .tools-panel {
+    overflow-y: auto; /* Allows internal scrolling */
+    height: 100%;
+    padding-right: 1rem; /* Space for the scrollbar */
+    padding-bottom: 2rem; /* Buffer at the bottom */
+}
+
+/* QoL: Custom slim scrollbars for the panels */
+.content-panel::-webkit-scrollbar, .tools-panel::-webkit-scrollbar { width: 6px; }
+.content-panel::-webkit-scrollbar-track, .tools-panel::-webkit-scrollbar-track { background: transparent; }
+.content-panel::-webkit-scrollbar-thumb, .tools-panel::-webkit-scrollbar-thumb { background-color: var(--border); border-radius: 10px; }
+.content-panel::-webkit-scrollbar-thumb:hover, .tools-panel::-webkit-scrollbar-thumb:hover { background-color: var(--primary); }
+
+/* Reader Header */
+.reader-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.btn-icon { display: flex; align-items: center; justify-content: center; color: var(--primary); background: transparent; border: none; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; transition: background-color 0.2s; }
+.btn-icon:hover { background-color: var(--secondary); }
+.reader-title { font-size: 1.5rem; color: var(--foreground); font-weight: 500; margin: 0; }
+
+/* Text Content & Interactive Words */
+.reader-body { padding: 3rem; line-height: 2; font-size: 1.1rem; }
+.word { cursor: pointer; border-radius: 0.25rem; padding: 0 0.15rem; margin: 0 -0.15rem; transition: background-color 0.2s, color 0.2s; }
+.word:hover { background-color: var(--secondary); color: var(--foreground); }
+.word.selected { background-color: var(--primary); color: var(--primary-foreground); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+/* Tool Cards */
+.selected-word-display { padding: 1.5rem; text-align: center; font-weight: 500; }
+.text-muted { color: var(--muted-foreground); }
+.tool-card { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+/* Compact Tool Header (Button + Pagination) */
+.tool-header-row { display: flex; justify-content: space-between; align-items: center; }
+
+/* New Title Button */
+.tool-trigger-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: transparent; color: var(--primary);
+    border: 1px solid var(--border); padding: 0.5rem 1rem;
+    border-radius: 1.5rem; font-weight: 500; font-size: 1rem;
+    cursor: pointer; transition: all 0.2s;
+}
+.tool-trigger-btn:hover { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+/* Result Areas - Naturally flexible height */
+.tool-content { display: flex; flex-direction: column; gap: 0.75rem; }
+.result-area {
+    min-height: 80px; height: auto; /* Adapts to long translations automatically */
+    border-radius: 1rem; padding: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; background-color: var(--input-background); border: 1px solid var(--border);
+}
+.result-area.empty { border: 1px dashed var(--border); color: var(--muted-foreground); font-size: 0.95rem; background: transparent; }
+
+/* Audio Box Fix: Removes the square field when audio is generated */
+#audio-result:not(.empty) { background: transparent; border: none; padding: 0; min-height: auto; justify-content: flex-start; }
+
+.generated-image { width: 100%; border-radius: 0.5rem; object-fit: cover; }
+.generated-audio-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: var(--primary-foreground); padding: 0.6rem 1.25rem; border-radius: 2rem; border: none; cursor: pointer; font-size: 1rem; font-weight: 500; }
+.generated-audio-btn:hover { opacity: 0.9; }
+
+/* Pagination right-aligned */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.9rem; color: var(--muted-foreground); }
+.page-btn { background: transparent; border: none; cursor: pointer; color: var(--foreground); display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; transition: background-color 0.2s; }
+.page-btn:hover:not(:disabled) { background-color: var(--secondary); }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Responsive */
+@media (max-width: 992px) {
+    body.reader-mode { height: auto; overflow: visible; }
+    .reader-layout { flex-direction: column; overflow: visible; }
+    .content-panel, .tools-panel { width: 100%; overflow-y: visible; height: auto; }
+}
+
+/* Multi-instance highlight (Subtle background) */
+.word.instance-highlight {
+    background-color: var(--secondary);
+    border-radius: 0.25rem;
+}
+
+/* Primary selection (Bold and Pulsing) */
+.word.selected {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+    animation: pulse-select 1.5s infinite;
+    z-index: 10;
+    position: relative;
+}
+
+@keyframes pulse-select {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Left-align specific results */
+.selected-word-display {
+    text-align: left !important;
+    padding-left: 1.5rem;
+}
+
+.text-left-align {
+    text-align: left;
+    width: 100%;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.result-area {
+    /* Updated to allow left alignment internally */
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1.25rem;
+}
+
+/* Tool trigger button fix for left alignment */
+.tool-trigger-btn {
+    transition: transform 0.1s ease;
+}
+.tool-trigger-btn:active {
+    transform: scale(0.96);
+}
+
+/* Custom Selection Color for the whole page */
+::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+}
