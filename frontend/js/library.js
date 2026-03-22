@@ -132,12 +132,33 @@ libraryBody.addEventListener('click', (e) => {
     });
 });
 
-// Confirm Delete (Placeholder for your backend DELETE request)
 document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
     if (activeRowId) {
-        // fetch(`${API_BASE_URL}/${activeRowId}`, { method: 'DELETE' })
+        await fetch(`${API_BASE_URL}/${activeRowId}`, {
+            method: 'DELETE'
+        });
+
         deleteModal.classList.add('hidden');
-        fetchLibraryData(); // Refresh list
+        fetchLibraryData();
+    }
+});
+
+document.getElementById('save-edit-btn').addEventListener('click', async () => {
+    const newName = editNameInput.value;
+
+    if (activeRowId && newName) {
+        await fetch(`${API_BASE_URL}/${activeRowId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: newName
+            })
+        });
+
+        editModal.classList.add('hidden');
+        fetchLibraryData();
     }
 });
 

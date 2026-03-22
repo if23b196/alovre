@@ -115,4 +115,25 @@ public class ContentService {
                 ))
                 .toList();
     }
+
+    public void deleteContent(Long id) {
+
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Content not found"));
+
+        // delete file from MinIO if exists
+        if (content.getMinioObjectKey() != null) {
+            storageService.delete(content.getMinioObjectKey());
+        }
+
+        contentRepository.delete(content);
+    }
+
+    public Content updateTitle(Long id, String title) {
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Content not found"));
+
+        content.setTitle(title);
+        return contentRepository.save(content);
+    }
 }

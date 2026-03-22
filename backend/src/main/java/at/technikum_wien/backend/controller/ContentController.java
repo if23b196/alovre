@@ -1,6 +1,7 @@
 package at.technikum_wien.backend.controller;
 
 import at.technikum_wien.backend.dto.content.ContentListResponse;
+import at.technikum_wien.backend.dto.content.UpdateTitleRequest;
 import at.technikum_wien.backend.dto.content.UploadTextRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -65,16 +66,20 @@ public class ContentController {
         return null;
     }
 
-    // 8. Delete content by ID
     @DeleteMapping("/{id}")
-    public void deleteContent(@PathVariable Long id) {
-        // TODO: delete content
+    public ResponseEntity<Void> deleteContent(@PathVariable Long id) {
+
+        contentService.deleteContent(id);
+        return ResponseEntity.noContent().build();
     }
 
-    // Optional: Update content title
+    // 9. Update content title
     @PutMapping("/{id}")
-    public void updateContentTitle(@PathVariable Long id,
-                                   @RequestParam("title") String title) {
-        // TODO: update content title
+    public ResponseEntity<Content> updateTitle(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateTitleRequest request) {
+
+        Content updated = contentService.updateTitle(id, request.getTitle());
+        return ResponseEntity.ok(updated);
     }
 }
