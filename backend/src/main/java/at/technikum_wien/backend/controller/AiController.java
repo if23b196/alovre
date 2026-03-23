@@ -3,15 +3,37 @@ package at.technikum_wien.backend.controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
+import at.technikum_wien.backend.dto.ai.AnnotationRequest;
+import at.technikum_wien.backend.dto.ai.AnnotationResponse;
+import at.technikum_wien.backend.model.Annotation;
+import at.technikum_wien.backend.service.AiService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/ai")
+@RequiredArgsConstructor
 public class AiController {
 
-    // 4. Translation / Explanation endpoint
+    private final AiService aiService;
+
+    // Translation / Explanation
     @PostMapping("/explain")
-    public Map<String, Object> explainText(@RequestBody Map<String, String> request) {
-        // TODO: call AI to translate/explain text
-        return null;
+    public ResponseEntity<AnnotationResponse> explainText(
+            @RequestBody AnnotationRequest request) {
+
+        Annotation annotation = aiService.generateTranslation(
+                request.getContentId(),
+                request.getWord()
+        );
+
+        return ResponseEntity.ok(
+                new AnnotationResponse(
+                        annotation.getSelectedText(),
+                        annotation.getGeneratedText()
+                )
+        );
     }
 
     // Optional: separate translation endpoint

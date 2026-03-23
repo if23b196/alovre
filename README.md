@@ -5,7 +5,6 @@ To reload website (frontend) on Windows 11: Ctrl + Shift + R
 
 backend/
 └── src/main/java/at/technikum_wien/backend/
-
     ├── controller/
     │   ├── ContentController.java
     │   └── AiController.java
@@ -47,10 +46,5 @@ backend/
     │   ├── MinioConfig.java
     │   └── AsyncConfig.java
     │
-    ├── orchestrator/   (optional but GOOD for thesis)
-    │   └── DocumentProcessingOrchestrator.java
-    │
-    ├── util/ (optional)
-    │   └── FileUtils.java
     │
     └── BackendApplication.java

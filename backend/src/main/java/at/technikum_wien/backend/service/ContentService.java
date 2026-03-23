@@ -1,5 +1,6 @@
 package at.technikum_wien.backend.service;
 
+import at.technikum_wien.backend.dto.content.ContentDetailResponse;
 import at.technikum_wien.backend.dto.content.ContentListResponse;
 import at.technikum_wien.backend.model.Content;
 import at.technikum_wien.backend.repository.ContentRepository;
@@ -116,6 +117,21 @@ public class ContentService {
                 .toList();
     }
 
+    public ContentDetailResponse getContentById(Long id) {
+
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Content not found"));
+
+        return new ContentDetailResponse(
+                content.getId(),
+                content.getTitle(),
+                content.getTextContent(),
+                content.getAnnotations(),
+                content.getImages(),
+                content.getAudios()
+        );
+    }
+
     public void deleteContent(Long id) {
 
         Content content = contentRepository.findById(id)
@@ -136,4 +152,6 @@ public class ContentService {
         content.setTitle(title);
         return contentRepository.save(content);
     }
+
+
 }

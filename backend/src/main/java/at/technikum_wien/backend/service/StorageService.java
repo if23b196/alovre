@@ -80,4 +80,34 @@ public class StorageService {
             throw new RuntimeException("MinIO delete failed", e);
         }
     }
+
+    public String uploadBytes(byte[] data, String filename) {
+        try {
+            boolean exists = minioClient.bucketExists(
+                    BucketExistsArgs.builder().bucket(bucketName).build()
+            );
+
+            if (!exists) {
+                minioClient.makeBucket(
+                        MakeBucketArgs.builder().bucket(bucketName).build()
+                );
+            }
+
+            String objectKey = UUID.randomUUID() + "-" + filename;
+
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(objectKey)
+                            .stream(new java.io.ByteArrayInputStream(data), data.length, -1)
+                            .contentType("image/png")
+                            .build()
+            );
+
+            return objectKey;
+
+        } catch (Exception e) {
+            throw new RuntimeException("MinIO upload (bytes) failed", e);
+        }
+    }
 }

@@ -108,7 +108,15 @@ const deleteItemNameText = document.getElementById('delete-item-name');
 libraryBody.addEventListener('click', (e) => {
     const row = e.target.closest('tr');
     if (!row) return;
-    activeRowId = row.dataset.id;
+
+    const id = row.dataset.id;
+    activeRowId = id;
+
+    // NEW: redirect when clicking name (or row, your choice)
+    if (e.target.closest('.item-name')) {
+        window.location.href = `reader.html?id=${id}`;
+        return;
+    }
 
     if (e.target.closest('.edit-btn')) {
         const currentName = row.querySelector('.item-name-text').textContent;
