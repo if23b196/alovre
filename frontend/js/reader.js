@@ -37,7 +37,10 @@ function renderContent(data) {
 }
 
 function renderText(text) {
-    if (!text) return;
+    if (!text || text.trim() === "") {
+        textContainer.innerHTML = "<p>No text available</p>";
+        return;
+    }
 
     const tokens = text.split(/([\w'-]+)/g);
 
@@ -55,7 +58,7 @@ function loadToolData(data) {
     toolState.image.history = [];
     toolState.audio.history = [];
 
-    // 🧠 Translations (Annotations)
+    // Translations (Annotations)
     if (data.annotations) {
         data.annotations.forEach(a => {
             toolState.translate.history.push({
@@ -69,8 +72,9 @@ function loadToolData(data) {
     if (data.images) {
         data.images.forEach(img => {
             toolState.image.history.push({
-                word: img.word,
-                result: img.url
+                // CORRECT
+                word: img.selectedText,
+                result: `http://localhost:8080/api/content/image/${img.minioObjectKey}`
             });
         });
     }
@@ -79,8 +83,9 @@ function loadToolData(data) {
     if (data.audios) {
         data.audios.forEach(audio => {
             toolState.audio.history.push({
-                word: audio.word,
-                result: audio.url
+                // ✅ CORRECT
+                word: audio.selectedText,
+                result: `http://localhost:8080/api/content/audio/${audio.minioObjectKey}`
             });
         });
     }
@@ -93,16 +98,15 @@ function loadToolData(data) {
 }
 
 
-
 const textContainer = document.getElementById('text-content');
 const selectedWordDisplay = document.getElementById('selected-word-text');
 let currentSelectedWord = null;
 
 // Updated Tool Data State: History now stores { word: "...", result: "..." }
 const toolState = {
-    translate: { history: [], currentIndex: -1 },
-    image: { history: [], currentIndex: -1 },
-    audio: { history: [], currentIndex: -1 }
+    translate: {history: [], currentIndex: -1},
+    image: {history: [], currentIndex: -1},
+    audio: {history: [], currentIndex: -1}
 };
 
 // 1. Initialize Reader Content
@@ -284,8 +288,9 @@ document.getElementById('btn-audio').addEventListener('click', () => {
 // Toast Notification Helper (reused from upload.js for consistency)
 const toastContainer = document.getElementById('toast-container');
 const toastMessage = document.getElementById('toast-message');
+
 function showToast(message, type = 'info', icon = 'info') {
-    if(!toastContainer) return; // safeguard
+    if (!toastContainer) return; // safeguard
     toastContainer.classList.remove('hidden');
     toastMessage.className = `toast ${type}`;
     const iconClass = icon === 'loader-2' ? 'spin' : '';

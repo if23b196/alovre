@@ -1,8 +1,5 @@
 package at.technikum_wien.backend.dto.content;
 
-import at.technikum_wien.backend.model.Annotation;
-import at.technikum_wien.backend.model.Audio;
-import at.technikum_wien.backend.model.Image;
 import lombok.*;
 import java.util.List;
 
@@ -16,7 +13,7 @@ public class ContentDetailResponse {
     private String title;
     private String textContent;
 
-    private List<Annotation> annotations;
-    private List<Image> images;
-    private List<Audio> audios;
+    private List<AnnotationDto> annotations;
+    private List<ImageDto> images;
+    private List<AudioDto> audios;
 }

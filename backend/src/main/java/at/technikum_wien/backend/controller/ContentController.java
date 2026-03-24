@@ -1,7 +1,12 @@
 package at.technikum_wien.backend.controller;
 
 import at.technikum_wien.backend.dto.content.*;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.InputStream;
 import java.util.List;
 
 import at.technikum_wien.backend.model.Content;
@@ -78,5 +83,27 @@ public class ContentController {
 
         Content updated = contentService.updateTitle(id, request.getTitle());
         return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/image/{objectKey}")
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable String objectKey) {
+
+        InputStream is = contentService.getFile(objectKey);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + objectKey + "\"")
+                .contentType(MediaType.IMAGE_PNG) // adjust if needed
+                .body(new InputStreamResource(is));
+    }
+
+    @GetMapping("/audio/{objectKey}")
+    public ResponseEntity<InputStreamResource> getAudio(@PathVariable String objectKey) {
+
+        InputStream is = contentService.getFile(objectKey);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + objectKey + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM) // or audio/mpeg
+                .body(new InputStreamResource(is));
     }
 }

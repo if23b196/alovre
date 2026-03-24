@@ -1,7 +1,6 @@
 package at.technikum_wien.backend.service;
 
-import at.technikum_wien.backend.dto.content.ContentDetailResponse;
-import at.technikum_wien.backend.dto.content.ContentListResponse;
+import at.technikum_wien.backend.dto.content.*;
 import at.technikum_wien.backend.model.Content;
 import at.technikum_wien.backend.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
@@ -122,13 +121,43 @@ public class ContentService {
         Content content = contentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Content not found"));
 
+        List<AnnotationDto> annotationDtos = content.getAnnotations().stream()
+                .map(a -> new AnnotationDto(
+                        a.getId(),
+                        a.getLanguage(),
+                        a.getSelectedText(),
+                        a.getGeneratedText(),
+                        a.getGeneratedTimestamp()
+                ))
+                .toList();
+
+        List<ImageDto> imageDtos = content.getImages().stream()
+                .map(i -> new ImageDto(
+                        i.getId(),
+                        i.getSelectedText(),
+                        i.getMinioObjectKey(),
+                        i.getGeneratedTimestamp()
+                ))
+                .toList();
+
+        List<AudioDto> audioDtos = content.getAudios().stream()
+                .map(i -> new AudioDto(
+                        i.getId(),
+                        i.getText(),
+                        i.getMinioObjectKey(),
+                        i.getVoice(),
+                        i.getGeneratedTimestamp()
+                ))
+                .toList();
+        // same for audio...
+
         return new ContentDetailResponse(
                 content.getId(),
                 content.getTitle(),
                 content.getTextContent(),
-                content.getAnnotations(),
-                content.getImages(),
-                content.getAudios()
+                annotationDtos,
+                imageDtos,
+                audioDtos
         );
     }
 
@@ -137,7 +166,7 @@ public class ContentService {
         Content content = contentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Content not found"));
 
-        // delete file from MinIO if exists
+        // delete the file from MinIO if exists
         if (content.getMinioObjectKey() != null) {
             storageService.delete(content.getMinioObjectKey());
         }
@@ -153,5 +182,7 @@ public class ContentService {
         return contentRepository.save(content);
     }
 
-
+    public InputStream getFile(String objectKey) {
+        return storageService.download(objectKey);
+    }
 }
