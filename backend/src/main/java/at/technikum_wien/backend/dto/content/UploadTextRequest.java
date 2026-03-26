@@ -13,4 +13,6 @@ public class UploadTextRequest {
 
     @NotBlank(message = "Text must not be empty")
     private String text;
+
+    private String language;
 }

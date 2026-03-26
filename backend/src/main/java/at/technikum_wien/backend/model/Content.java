@@ -22,6 +22,9 @@ public class Content {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "language", nullable = false)
+    private String language;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ContentType type; // PDF, TXT, TEXT

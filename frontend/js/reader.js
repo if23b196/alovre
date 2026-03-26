@@ -68,7 +68,7 @@ function loadToolData(data) {
         });
     }
 
-    // 🖼 Images
+    // Images
     if (data.images) {
         data.images.forEach(img => {
             toolState.image.history.push({
@@ -79,11 +79,11 @@ function loadToolData(data) {
         });
     }
 
-    // 🔊 Audios
+    // Audios
     if (data.audios) {
         data.audios.forEach(audio => {
             toolState.audio.history.push({
-                // ✅ CORRECT
+                // CORRECT
                 word: audio.selectedText,
                 result: `http://localhost:8080/api/content/audio/${audio.minioObjectKey}`
             });
@@ -210,6 +210,27 @@ function renderToolState(toolKey) {
     pagination.querySelector('.next-btn').disabled = state.currentIndex === state.history.length - 1;
 }
 
+function getContextSentence(word) {
+    const text = textContainer.innerText;
+
+    // Split into sentences (simple version)
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+
+    // Find sentence containing the word
+    const index = sentences.findIndex(s =>
+        s.toLowerCase().includes(word.toLowerCase())
+    );
+
+    if (index === -1) return text;
+
+    // Take previous + current + next sentence (more context)
+    const prev = sentences[index - 1] || '';
+    const current = sentences[index] || '';
+    const next = sentences[index + 1] || '';
+
+    return `${prev} ${current} ${next}`.trim();
+}
+
 // Initialization and Listeners remain the same...
 // (Ensure handleGenerate calls match the new storage format)
 document.getElementById('btn-translate').addEventListener('click', async () => {
@@ -219,8 +240,20 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
     }
 
     const contentId = getContentIdFromUrl();
+    const targetLanguage = document.getElementById('language-picker').value; // Get selected language
+    const context = getContextSentence(currentSelectedWord);
 
-    showToast('Translating...', 'info', 'loader-2');
+    const langMap = {
+        English: "English",
+        Spanish: "Spanish",
+        German: "German",
+        French: "French",
+        Italian: "Italian",
+        Portuguese: "Portuguese",
+        Turkish: "Turkish"
+    };
+
+    showToast(`Translating to ${langMap[targetLanguage]}...`, 'info', 'loader-2');
 
     try {
         const response = await fetch('http://localhost:8080/api/ai/explain', {
@@ -230,7 +263,9 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
             },
             body: JSON.stringify({
                 contentId: contentId,
-                word: currentSelectedWord
+                word: currentSelectedWord,
+                language: targetLanguage,
+                context: context
             })
         });
 
@@ -238,17 +273,13 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
 
         const data = await response.json();
 
-        // Push into tool state (same structure as before)
         toolState.translate.history.push({
             word: data.word,
             result: data.result
         });
 
-        toolState.translate.currentIndex =
-            toolState.translate.history.length - 1;
-
+        toolState.translate.currentIndex = toolState.translate.history.length - 1;
         renderToolState('translate');
-
         showToast('Translation ready!', 'success', 'check-circle-2');
 
     } catch (error) {
@@ -256,7 +287,6 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
         showToast('Translation failed', 'error', 'alert-circle');
     }
 });
-// ... (rest of listeners)
 
 document.getElementById('btn-image').addEventListener('click', () => {
     handleGenerate('image', (word) => `https://placehold.co/400x250/b85c2f/fff8f2?text=${word}`);

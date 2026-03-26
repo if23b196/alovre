@@ -16,4 +16,6 @@ public class UploadDocumentRequest {
 
     @NotNull(message = "File must not be null")
     private MultipartFile file;
+
+    private String language;
 }

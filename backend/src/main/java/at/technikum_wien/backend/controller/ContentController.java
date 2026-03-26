@@ -33,7 +33,8 @@ public class ContentController {
 
         Content saved = contentService.uploadDocument(
                 request.getTitle(),
-                request.getFile()
+                request.getFile(),
+                request.getLanguage()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
@@ -46,7 +47,8 @@ public class ContentController {
 
         Content saved = contentService.uploadText(
                 request.getTitle(),
-                request.getText()
+                request.getText(),
+                request.getLanguage()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);

@@ -48,3 +48,11 @@ backend/
     │
     │
     └── BackendApplication.java
+
+
+- If there is "\n" in the text, I want the text to be displayed accordingly, meaning a newline/paragraph should start.
+- Perhaps the possibility of editing the contents text in the reading interface, so the user can manually correct mistakes.
+When uploading a document, the user should be able to choose the language the content is in. 
+There should be a button in the reading interface to be able to select the language they want the translations in.
+Surrounding text around the selected word should also be given to Gemini for more accurate translations.
+- Surrounding text around the selected word should also be given to Nano Banana for more accurate translations. 

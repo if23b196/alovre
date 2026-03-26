@@ -18,14 +18,15 @@ public class AiController {
 
     private final AiService aiService;
 
-    // Translation / Explanation
     @PostMapping("/explain")
     public ResponseEntity<AnnotationResponse> explainText(
             @RequestBody AnnotationRequest request) {
 
         Annotation annotation = aiService.generateTranslation(
                 request.getContentId(),
-                request.getWord()
+                request.getWord(),
+                request.getLanguage(),
+                request.getContext()
         );
 
         return ResponseEntity.ok(

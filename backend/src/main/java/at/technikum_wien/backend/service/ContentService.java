@@ -23,7 +23,7 @@ public class ContentService {
     private final PdfService pdfService;
     private final OcrService ocrService;
 
-    public Content uploadDocument(String title, MultipartFile file) {
+    public Content uploadDocument(String title, MultipartFile file, String language) {
 
         // 1. Upload file to MinIO
         String objectKey = storageService.upload(file);
@@ -31,6 +31,7 @@ public class ContentService {
         // 2. Create the content entity (immediately!)
         Content content = new Content();
         content.setTitle(title);
+        content.setLanguage(language);
 
         String contentType = file.getContentType();
 
@@ -87,10 +88,11 @@ public class ContentService {
         }
     }
 
-    public Content uploadText(String title, String text) {
+    public Content uploadText(String title, String text, String language) {
 
         Content content = new Content();
         content.setTitle(title);
+        content.setLanguage(language);
         content.setType(Content.ContentType.TEXT);
         content.setTextContent(text);
         content.setUploadTimestamp(LocalDateTime.now());

@@ -407,3 +407,92 @@ body.reader-mode .navbar {
     background: var(--primary);
     color: var(--primary-foreground);
 }
+
+/* Language Selector Styles - Exact match to Tool Trigger Button */
+.tool-group { display: flex; align-items: center; gap: 0.75rem; }
+
+.language-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 42px; /* Fixed height to match the button next to it */
+}
+
+.language-select {
+    appearance: none;
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+
+    /* Increased padding-left to 2.8rem to accommodate the larger icon */
+    padding: 0 1.5rem 0 2.8rem;
+    height: 100%;
+    border-radius: 1.5rem;
+    font-size: 1rem; /* Match the 1rem of .tool-trigger-btn */
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+    display: flex;
+    align-items: center;
+}
+
+.language-select:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+}
+
+/* Icon scaling to match Lucide defaults in buttons */
+.select-icon {
+    position: absolute;
+    left: 1rem;
+    width: 20px !important; /* Increased from 16px to match other buttons */
+    height: 20px !important;
+    color: var(--primary);
+    pointer-events: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.language-select-wrapper:hover .select-icon {
+    color: var(--primary-foreground);
+}
+
+/* Dropdown list styling */
+.language-select option {
+    background-color: var(--card);
+    color: var(--foreground);
+}
+
+/* Specific adjustment for the Upload page dropdown */
+.language-select-wrapper.upload-select {
+    width: 100%;
+    height: auto;
+}
+
+.language-select-wrapper.upload-select .language-select {
+    width: 100%;
+    padding: 1.25rem 1.25rem 1.25rem 3.5rem; /* Match text input padding */
+    font-size: 1rem;
+    border-radius: 1.25rem;
+    background-color: var(--input-background);
+}
+
+.language-select-wrapper.upload-select .select-icon {
+    left: 1.25rem;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Ensure the hover state doesn't look like a button here, but like a focused input */
+.language-select-wrapper.upload-select .language-select:hover {
+    background-color: var(--input-background);
+    border-color: var(--primary);
+    color: var(--foreground);
+}
+
+.language-select-wrapper.upload-select:hover .select-icon {
+    color: var(--primary); /* Keep icon primary color on hover */
+}

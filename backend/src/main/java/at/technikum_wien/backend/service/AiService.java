@@ -31,12 +31,29 @@ public class AiService {
     // -----------------------------
     // TRANSLATION
     // -----------------------------
-    public Annotation generateTranslation(Long contentId, String word) {
+    public Annotation generateTranslation(Long contentId,
+                                          String word,
+                                          String targetLanguage,
+                                          String context) {
 
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new RuntimeException("Content not found"));
 
-        String prompt = "Translate the word '" + word + "' to German. Only return the translation.";
+        String prompt = """
+                Only answer with valid JSON.
+                
+                Translate the word "%s" from %s into %s using the context below.
+                Then explain the word very briefly in ONE sentence in %s.
+                
+                Context:
+                "%s"
+                
+                Return JSON:
+                {
+                  "translation": "...",
+                  "explanation": "..."
+                }
+                """.formatted(word, content.getLanguage(), targetLanguage, content.getLanguage(), context);
 
         GenerateContentResponse response = client.models.generateContent(
                 "gemini-2.5-flash-lite",
@@ -46,11 +63,16 @@ public class AiService {
 
         String result = response.text();
 
+        String translation = result.split("\"translation\"\\s*:\\s*\"")[1].split("\"")[0];
+        String explanation = result.split("\"explanation\"\\s*:\\s*\"")[1].split("\"")[0];
+
+        String combined = "'" + translation + "' - " + explanation;
+
         Annotation annotation = new Annotation();
         annotation.setContent(content);
-        annotation.setLanguage("DE");
+        annotation.setLanguage(targetLanguage.toUpperCase());
         annotation.setSelectedText(word);
-        annotation.setGeneratedText(result.trim());
+        annotation.setGeneratedText(combined);
         annotation.setGeneratedTimestamp(LocalDateTime.now());
 
         return annotationRepository.save(annotation);
