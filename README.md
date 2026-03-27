@@ -55,4 +55,11 @@ backend/
 When uploading a document, the user should be able to choose the language the content is in. 
 There should be a button in the reading interface to be able to select the language they want the translations in.
 Surrounding text around the selected word should also be given to Gemini for more accurate translations.
-- Surrounding text around the selected word should also be given to Nano Banana for more accurate translations. 
+- Surrounding text around the selected word should also be given to Nano Banana for more accurate translations.
+
+Nano Banana:
+gemini 2.5 flash image: Quota Exceeded (Error 429), run out of "credits" or "turns" for the Free Tier of the Gemini API.
+gemini 2.5 flash image preview: Model Not Found (Error 404), API Docs says this is deprecated.
+
+Nano Banana 2 (gemini-3.1-flash-image-preview): Quota Exceeded (429) error
+Nano Banana 2 Pro (gemini-3-pro-image-preview): Quota Exceeded (429) error

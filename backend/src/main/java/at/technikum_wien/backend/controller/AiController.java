@@ -1,5 +1,7 @@
 package at.technikum_wien.backend.controller;
 
+import at.technikum_wien.backend.dto.ai.ImageRequest;
+import at.technikum_wien.backend.model.Image;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
@@ -37,18 +39,18 @@ public class AiController {
         );
     }
 
-    // Optional: separate translation endpoint
-    @PostMapping("/translate")
-    public Map<String, Object> translateText(@RequestBody Map<String, String> request) {
-        // TODO: call AI to translate text
-        return null;
-    }
-
     // 5. Image generation
     @PostMapping("/image")
-    public Map<String, Object> generateImage(@RequestBody Map<String, String> request) {
-        // TODO: call AI to generate image
-        return null;
+    public ResponseEntity<Map<String, String>> generateImage(@RequestBody ImageRequest request) {
+
+        Image image = aiService.generateImage(
+                request.getContentId(),
+                request.getWord(),
+                request.getContext()
+        );
+
+        Map<String, String> response = Map.of("imageKey", image.getMinioObjectKey());
+        return ResponseEntity.ok(response);
     }
 
     // 6. Text-to-speech

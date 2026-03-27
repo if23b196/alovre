@@ -8,13 +8,12 @@ import at.technikum_wien.backend.repository.ContentRepository;
 import at.technikum_wien.backend.repository.ImageRepository;
 
 import com.google.genai.Client;
-import com.google.genai.types.GenerateContentConfig;
-import com.google.genai.types.GenerateContentResponse;
-import com.google.genai.types.Part;
+import com.google.genai.types.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -81,37 +80,65 @@ public class AiService {
     // -----------------------------
     // IMAGE GENERATION
     // -----------------------------
-    public Image generateImage(Long contentId, String word) {
+    public Image generateImage(Long contentId, String word, String context) {
 
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new RuntimeException("Content not found"));
 
-        GenerateContentConfig config = GenerateContentConfig.builder()
-                .responseModalities("TEXT", "IMAGE")
+        // -----------------------------
+        // Nano Banana 2 Prompt Building
+        // -----------------------------
+        String prompt = "Create a high-quality, clear image representing the word '" + word + "'.";
+        if (context != null && !context.isBlank()) {
+            prompt += " Context: " + context;
+        }
+
+        // Nano Banana uses GenerateContentConfig with responseModalities
+        com.google.genai.types.GenerateContentConfig config = com.google.genai.types.GenerateContentConfig.builder()
+                .responseModalities(java.util.List.of("TEXT", "IMAGE"))
                 .build();
 
-        GenerateContentResponse response = client.models.generateContent(
+        // Use generateContent instead of generateImages
+        com.google.genai.types.GenerateContentResponse response = client.models.generateContent(
                 "gemini-2.5-flash-image",
-                "Create an image representing: " + word,
+                prompt,
                 config
         );
 
         byte[] imageBytes = null;
 
-        for (Part part : response.parts()) {
-            if (part.inlineData().isPresent() &&
-                    part.inlineData().get().data().isPresent()) {
+        // Iterate through the parts to find the image data
+        if (response.candidates().isPresent() && !response.candidates().get().isEmpty()) {
+            com.google.genai.types.Candidate candidate = response.candidates().get().get(0);
 
-                imageBytes = part.inlineData().get().data().get();
-                break;
+            // Check if content exists
+            if (candidate.content().isPresent()) {
+                // Check if parts() Optional is present
+                if (candidate.content().get().parts().isPresent()) {
+
+                    // Unwrap the Optional to get the List<Part>
+                    List<Part> parts = candidate.content().get().parts().get();
+
+                    for (com.google.genai.types.Part part : parts) {
+                        if (part.inlineData().isPresent()) {
+                            com.google.genai.types.Blob blob = part.inlineData().get();
+                            if (blob.data().isPresent()) {
+                                imageBytes = blob.data().get();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
         if (imageBytes == null) {
-            throw new RuntimeException("No image returned from Gemini");
+            throw new RuntimeException("Nano Banana did not return any image data. Check safety filters or quota.");
         }
 
+        // -----------------------------
         // Upload to MinIO
+        // -----------------------------
         String objectKey = storageService.uploadBytes(imageBytes, word + ".png");
 
         Image image = new Image();
@@ -122,4 +149,62 @@ public class AiService {
 
         return imageRepository.save(image);
     }
+/*
+    public Image generateImage(Long contentId, String word, String context) {
+
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new RuntimeException("Content not found"));
+
+        String prompt = "Create an image representing the word '" + word + "'.";
+        if (context != null && !context.isBlank()) {
+            prompt += " Context: " + context;
+        }
+
+        GenerateImagesResponse response = client.models.generateImages(
+                "imagen-4.0-fast-generate-001",
+                prompt,
+                GenerateImagesConfig.builder()
+                        .numberOfImages(1)
+                        .build()
+        );
+
+        byte[] imageBytes = null;
+
+        // The SDK uses Optional-like patterns for list access and fields
+        // 1. Check if the list of images exists and is not empty
+        if (response.generatedImages().isPresent() && !response.generatedImages().get().isEmpty()) {
+
+            // 2. Get the first GeneratedImage from the list
+            GeneratedImage generatedImage = response.generatedImages().get().get(0);
+
+            // 3. Access the internal Image object
+            if (generatedImage.image().isPresent()) {
+                com.google.genai.types.Image imgObj = generatedImage.image().get();
+
+                // 4. FIX: Use imageBytes() instead of data()
+                if (imgObj.imageBytes().isPresent()) {
+                    imageBytes = imgObj.imageBytes().get();
+                }
+            }
+        }
+
+        if (imageBytes == null) {
+            throw new RuntimeException("No image bytes found in response.");
+        }
+
+        // -----------------------------
+        // Upload to MinIO
+        // -----------------------------
+        String objectKey = storageService.uploadBytes(imageBytes, word + ".png");
+
+        Image image = new Image();
+        image.setContent(content);
+        image.setSelectedText(word);
+        image.setMinioObjectKey(objectKey);
+        image.setGeneratedTimestamp(LocalDateTime.now());
+
+        return imageRepository.save(image);
+    }
+
+ */
 }

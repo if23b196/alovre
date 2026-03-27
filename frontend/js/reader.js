@@ -288,8 +288,48 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('btn-image').addEventListener('click', () => {
-    handleGenerate('image', (word) => `https://placehold.co/400x250/b85c2f/fff8f2?text=${word}`);
+document.getElementById('btn-image').addEventListener('click', async () => {
+    if (!currentSelectedWord) {
+        showToast('Please select a word first.', 'error', 'alert-circle');
+        return;
+    }
+
+    const contentId = getContentIdFromUrl();
+    const context = getContextSentence(currentSelectedWord);
+
+    showToast('Generating image...', 'info', 'loader-2');
+
+    try {
+        const response = await fetch('http://localhost:8080/api/ai/image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contentId: contentId,
+                word: currentSelectedWord,
+                context: context
+            })
+        });
+
+        if (!response.ok) throw new Error("Image generation failed");
+
+        const data = await response.json();
+
+        toolState.image.history.push({
+            word: currentSelectedWord,
+            result: `http://localhost:8080/api/content/image/${data.imageKey}`
+        });
+
+        toolState.image.currentIndex = toolState.image.history.length - 1;
+        renderToolState('image');
+
+        showToast('Image ready!', 'success', 'check-circle-2');
+
+    } catch (error) {
+        console.error(error);
+        showToast('Image generation failed', 'error', 'alert-circle');
+    }
 });
 
 document.getElementById('btn-audio').addEventListener('click', () => {
