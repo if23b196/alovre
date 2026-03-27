@@ -182,10 +182,19 @@ function renderToolState(toolKey) {
     } else if (toolKey === 'audio') {
         // SYNC: Button now shows the word stored in history, not the current global selection
         resultArea.innerHTML = `
-            <button class="generated-audio-btn">
+            <button class="generated-audio-btn" data-audio="${currentEntry.result}">
                 <i data-lucide="play-circle"></i> Play "${currentEntry.word}"
-            </button>`;
+            </button>
+        `;
+
         lucide.createIcons();
+
+        // Add play behavior
+        const btn = resultArea.querySelector('.generated-audio-btn');
+        btn.addEventListener('click', () => {
+            const audio = new Audio(btn.dataset.audio);
+            audio.play();
+        });
     }
 
     const counter = pagination.querySelector('.page-counter');
@@ -329,8 +338,46 @@ document.getElementById('btn-image').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('btn-audio').addEventListener('click', () => {
-    handleGenerate('audio', (word) => `Audio file for ${word}`);
+document.getElementById('btn-audio').addEventListener('click', async () => {
+    if (!currentSelectedWord) {
+        showToast('Please select a word first.', 'error', 'alert-circle');
+        return;
+    }
+
+    const contentId = getContentIdFromUrl();
+
+    showToast('Generating audio...', 'info', 'loader-2');
+
+    try {
+        const response = await fetch('http://localhost:8080/api/ai/tts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contentId: contentId,
+                word: currentSelectedWord
+            })
+        });
+
+        if (!response.ok) throw new Error("Audio generation failed");
+
+        const data = await response.json();
+
+        toolState.audio.history.push({
+            word: currentSelectedWord,
+            result: `http://localhost:8080/api/content/audio/${data.audioKey}`
+        });
+
+        toolState.audio.currentIndex = toolState.audio.history.length - 1;
+        renderToolState('audio');
+
+        showToast('Audio ready!', 'success', 'check-circle-2');
+
+    } catch (error) {
+        console.error(error);
+        showToast('Audio generation failed', 'error', 'alert-circle');
+    }
 });
 
 // Setup Pagination Listeners dynamically

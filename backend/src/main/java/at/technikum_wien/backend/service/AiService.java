@@ -1,9 +1,11 @@
 package at.technikum_wien.backend.service;
 
 import at.technikum_wien.backend.model.Annotation;
+import at.technikum_wien.backend.model.Audio;
 import at.technikum_wien.backend.model.Content;
 import at.technikum_wien.backend.model.Image;
 import at.technikum_wien.backend.repository.AnnotationRepository;
+import at.technikum_wien.backend.repository.AudioRepository;
 import at.technikum_wien.backend.repository.ContentRepository;
 import at.technikum_wien.backend.repository.ImageRepository;
 
@@ -21,6 +23,7 @@ public class AiService {
 
     private final AnnotationRepository annotationRepository;
     private final ImageRepository imageRepository;
+    private final AudioRepository audioRepository;
     private final ContentRepository contentRepository;
     private final StorageService storageService;
 
@@ -137,7 +140,7 @@ public class AiService {
 
         // Iterate through the parts to find the image data
         if (response.candidates().isPresent() && !response.candidates().get().isEmpty()) {
-            com.google.genai.types.Candidate candidate = response.candidates().get().get(0);
+            com.google.genai.types.Candidate candidate = response.candidates().get().getFirst();
 
             // Check if content exists
             if (candidate.content().isPresent()) {
@@ -177,62 +180,89 @@ public class AiService {
 
         return imageRepository.save(image);
     }
-/*
-    public Image generateImage(Long contentId, String word, String context) {
+
+    public Audio generateAudio(Long contentId, String word) {
 
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new RuntimeException("Content not found"));
 
-        String prompt = "Create an image representing the word '" + word + "'.";
-        if (context != null && !context.isBlank()) {
-            prompt += " Context: " + context;
-        }
+        // -----------------------------
+        // Prompt (VERY important for pronunciation)
+        // -----------------------------
+        String prompt = "Pronounce clearly: \"" + word + "\"";
 
-        GenerateImagesResponse response = client.models.generateImages(
-                "imagen-4.0-fast-generate-001",
+        // -----------------------------
+        // Config (THIS is the key part)
+        // -----------------------------
+        GenerateContentConfig config = GenerateContentConfig.builder()
+                .responseModalities(List.of("AUDIO"))
+                .speechConfig(
+                        SpeechConfig.builder()
+                                .voiceConfig(
+                                        VoiceConfig.builder()
+                                                .prebuiltVoiceConfig(
+                                                        PrebuiltVoiceConfig.builder()
+                                                                .voiceName("Kore") // you can change later
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build()
+                )
+                .build();
+
+        GenerateContentResponse response = client.models.generateContent(
+                "gemini-2.5-flash-preview-tts",
                 prompt,
-                GenerateImagesConfig.builder()
-                        .numberOfImages(1)
-                        .build()
+                config
         );
 
-        byte[] imageBytes = null;
+        byte[] audioBytes = null;
 
-        // The SDK uses Optional-like patterns for list access and fields
-        // 1. Check if the list of images exists and is not empty
-        if (response.generatedImages().isPresent() && !response.generatedImages().get().isEmpty()) {
+        // -----------------------------
+        // Extract AUDIO (same pattern as image)
+        // -----------------------------
+        if (response.candidates().isPresent() && !response.candidates().get().isEmpty()) {
+            Candidate candidate = response.candidates().get().get(0);
 
-            // 2. Get the first GeneratedImage from the list
-            GeneratedImage generatedImage = response.generatedImages().get().get(0);
+            if (candidate.content().isPresent() &&
+                    candidate.content().get().parts().isPresent()) {
 
-            // 3. Access the internal Image object
-            if (generatedImage.image().isPresent()) {
-                com.google.genai.types.Image imgObj = generatedImage.image().get();
+                List<Part> parts = candidate.content().get().parts().get();
 
-                // 4. FIX: Use imageBytes() instead of data()
-                if (imgObj.imageBytes().isPresent()) {
-                    imageBytes = imgObj.imageBytes().get();
+                for (Part part : parts) {
+                    if (part.inlineData().isPresent()) {
+                        Blob blob = part.inlineData().get();
+                        if (blob.data().isPresent()) {
+                            audioBytes = blob.data().get(); // PCM data
+                            break;
+                        }
+                    }
                 }
             }
         }
 
-        if (imageBytes == null) {
-            throw new RuntimeException("No image bytes found in response.");
+        if (audioBytes == null) {
+            throw new RuntimeException("No audio returned from Gemini");
         }
+
+        // -----------------------------
+        // Convert PCM → WAV (important for browser playback)
+        // -----------------------------
+        byte[] wavBytes = AudioUtil.convertPcmToWav(audioBytes, 24000, 1, 16);
 
         // -----------------------------
         // Upload to MinIO
         // -----------------------------
-        String objectKey = storageService.uploadBytes(imageBytes, word + ".png");
+        String objectKey = storageService.uploadBytes(wavBytes, word + ".wav");
 
-        Image image = new Image();
-        image.setContent(content);
-        image.setSelectedText(word);
-        image.setMinioObjectKey(objectKey);
-        image.setGeneratedTimestamp(LocalDateTime.now());
+        Audio audio = new Audio();
+        audio.setContent(content);
+        audio.setText(word);
+        audio.setMinioObjectKey(objectKey);
+        audio.setVoice("Kore");
+        audio.setGeneratedTimestamp(LocalDateTime.now());
 
-        return imageRepository.save(image);
+        return audioRepository.save(audio);
     }
-
- */
 }

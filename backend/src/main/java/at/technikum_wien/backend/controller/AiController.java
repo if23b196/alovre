@@ -1,6 +1,8 @@
 package at.technikum_wien.backend.controller;
 
+import at.technikum_wien.backend.dto.ai.AudioRequest;
 import at.technikum_wien.backend.dto.ai.ImageRequest;
+import at.technikum_wien.backend.model.Audio;
 import at.technikum_wien.backend.model.Image;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -55,8 +57,17 @@ public class AiController {
 
     // 6. Text-to-speech
     @PostMapping("/tts")
-    public Map<String, Object> textToSpeech(@RequestBody Map<String, String> request) {
-        // TODO: call TTS service
-        return null;
+    public ResponseEntity<Map<String, String>> textToSpeech(@RequestBody AudioRequest request) {
+
+        Audio audio = aiService.generateAudio(
+                request.getContentId(),
+                request.getWord()
+        );
+
+        Map<String, String> response = Map.of(
+                "audioKey", audio.getMinioObjectKey()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
