@@ -109,22 +109,6 @@ const toolState = {
     audio: {history: [], currentIndex: -1}
 };
 
-// 1. Initialize Reader Content
-function initReader() {
-    // UPDATED REGEX: Now includes \xAD (soft hyphen) and \u2011 (non-breaking hyphen)
-    // and matches words connected by hyphens as a single token.
-    const tokens = rawText.split(/([\w'-]+)/g);
-
-    textContainer.innerHTML = tokens.map(token => {
-        if (/([\w'-]+)/g.test(token)) {
-            // Lowercase data attribute for easier comparison when highlighting all instances
-            return `<span class="word" data-word="${token.toLowerCase()}">${token}</span>`;
-        }
-        return token;
-    }).join('');
-    lucide.createIcons();
-}
-
 // 2. Handle Word Selection & Multi-Highlight
 textContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('word')) {
@@ -210,25 +194,28 @@ function renderToolState(toolKey) {
     pagination.querySelector('.next-btn').disabled = state.currentIndex === state.history.length - 1;
 }
 
-function getContextSentence(word) {
+function getContextSentence(clickedElement) {
     const text = textContainer.innerText;
 
-    // Split into sentences (simple version)
+    // Split into sentences
     const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
 
-    // Find sentence containing the word
-    const index = sentences.findIndex(s =>
-        s.toLowerCase().includes(word.toLowerCase())
-    );
+    // Get full text BEFORE the clicked word
+    const range = document.createRange();
+    range.setStart(textContainer, 0);
+    range.setEndBefore(clickedElement);
 
-    if (index === -1) return text;
+    const textBefore = range.toString();
 
-    // Take previous + current + next sentence (more context)
-    const prev = sentences[index - 1] || '';
-    const current = sentences[index] || '';
-    const next = sentences[index + 1] || '';
+    // Count how many sentences are before this word
+    const sentencesBefore = textBefore.match(/[^.!?]+[.!?]+/g) || [];
+    const index = sentencesBefore.length;
 
-    return `${prev} ${current} ${next}`.trim();
+    // Get current + 4 previous sentences
+    const start = Math.max(0, index - 4);
+    const contextSentences = sentences.slice(start, index + 1);
+
+    return contextSentences.join(' ').trim();
 }
 
 // Initialization and Listeners remain the same...
@@ -241,7 +228,12 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
 
     const contentId = getContentIdFromUrl();
     const targetLanguage = document.getElementById('language-picker').value; // Get selected language
-    const context = getContextSentence(currentSelectedWord);
+    const selectedElement = document.querySelector('.word.selected');
+    if (!selectedElement) {
+        showToast('No word selected', 'error');
+        return;
+    }
+    const context = getContextSentence(selectedElement);
 
     const langMap = {
         English: "English",
@@ -295,7 +287,12 @@ document.getElementById('btn-image').addEventListener('click', async () => {
     }
 
     const contentId = getContentIdFromUrl();
-    const context = getContextSentence(currentSelectedWord);
+    const selectedElement = document.querySelector('.word.selected');
+    if (!selectedElement) {
+        showToast('No word selected', 'error');
+        return;
+    }
+    const context = getContextSentence(selectedElement);
 
     showToast('Generating image...', 'info', 'loader-2');
 

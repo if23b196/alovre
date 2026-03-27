@@ -88,10 +88,38 @@ public class AiService {
         // -----------------------------
         // Nano Banana 2 Prompt Building
         // -----------------------------
-        String prompt = "Create a high-quality, clear image representing the word '" + word + "'.";
-        if (context != null && !context.isBlank()) {
-            prompt += " Context: " + context;
-        }
+        String prompt = """
+                You are generating an educational image for a language learning app.
+                
+                Goal:
+                Create a clear, simple, and visually unambiguous image that represents the meaning of the word.
+                
+                Word:
+                "%s"
+                
+                Text language:
+                %s
+                
+                Context:
+                "%s"
+                
+                Instructions:
+                - Use the context to determine the correct meaning of the word.
+                - If the word has multiple meanings, choose ONLY the meaning that fits the context.
+                - The image must be easy to understand for learners (no abstract or symbolic visuals).
+                - Focus on ONE main subject.
+                - Avoid text inside the image.
+                - Avoid artistic or complex styles.
+                - Use a clean, realistic, or simple illustration style.
+                - Make the subject large and centered.
+                
+                Output:
+                Return ONLY the generated image.
+                """.formatted(
+                word,
+                content.getLanguage(),
+                context != null ? context : ""
+        );
 
         // Nano Banana uses GenerateContentConfig with responseModalities
         com.google.genai.types.GenerateContentConfig config = com.google.genai.types.GenerateContentConfig.builder()

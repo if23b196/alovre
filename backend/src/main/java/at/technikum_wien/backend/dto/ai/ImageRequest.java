@@ -12,5 +12,5 @@ import lombok.Setter;
 public class ImageRequest {
     private Long contentId;
     private String word;
-    private String context; // optional, AI may use it
+    private String context;
 }
