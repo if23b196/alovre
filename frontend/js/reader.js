@@ -42,7 +42,10 @@ function renderText(text) {
         return;
     }
 
-    const tokens = text.split(/([\w'-]+)/g);
+    // Preserve newlines
+    const withLineBreaks = text.replace(/\n/g, "<br>");
+
+    const tokens = withLineBreaks.split(/([\w'-]+)/g);
 
     textContainer.innerHTML = tokens.map(token => {
         if (/([\w'-]+)/g.test(token)) {

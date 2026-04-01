@@ -61,9 +61,30 @@ function renderTable(data) {
         tr.classList.add('library-item');
         tr.dataset.id = item.id;
 
-        const typeStr = item.type || 'DOCUMENT';
-        const badgeLabel = typeStr === 'PLAIN_TEXT' ? 'TEXT' : typeStr.toUpperCase();
-        const iconName = typeStr === 'PLAIN_TEXT' ? 'align-left' : 'file-text';
+        // Logic to differentiate icons and badges based on type
+        let iconName = 'file';     // default fallback
+        let badgeLabel = 'FILE';
+
+        switch (item.type) {
+            case 'PLAIN_TEXT':
+                iconName = 'align-left';
+                badgeLabel = 'TEXT';
+                break;
+
+            case 'PDF':
+                iconName = 'file-text';
+                badgeLabel = 'PDF';
+                break;
+
+            case 'TXT':
+                iconName = 'file';
+                badgeLabel = 'TXT';
+                break;
+
+            default:
+                iconName = 'file';
+                badgeLabel = item.type || 'FILE';
+        }
 
         const statusHtml = item.ocrProcessed
             ? `<td class="status-ready"><i data-lucide="check-circle-2"></i> Ready</td>`

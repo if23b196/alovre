@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>alovre - Reading App</title>
+    <title>alovre - Learn Languages by Reading</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -23,11 +23,47 @@
 </nav>
 
 <main class="container">
-    <header class="hero-section" style="margin-top: 4rem;">
-        <h1>Your quiet corner for reading.</h1>
-        <p>Upload your documents or plain text, immerse yourself in distraction-free reading, and unlock intelligent
-            insights.</p>
+    <header class="hero-section">
+        <h1>Read what you love.<br>Learn a language naturally.</h1>
+        <p>
+            Master a new language by immersing yourself in your <strong>own content</strong>.
+            Upload PDFs, TXT files, or paste raw text, and let intelligent AI turn your favorite reading material into an interactive learning experience.
+        </p>
+        <div class="hero-actions">
+            <a href="upload.html" class="btn-primary"><i data-lucide="upload-cloud"></i> Start Uploading</a>
+            <a href="library.html" class="btn-secondary"><i data-lucide="library"></i> View Library</a>
+        </div>
     </header>
+
+    <div class="features-grid">
+        <div class="card feature-card">
+            <div class="feature-icon-wrapper">
+                <i data-lucide="languages"></i>
+            </div>
+            <h3 class="feature-title">Contextual Translation</h3>
+            <p class="feature-desc">Move beyond simple dictionary lookups. Get AI-powered translations and deep grammar explanations that help you truly understand nuances and master new vocabulary organically.</p>
+        </div>
+
+        <div class="card feature-card">
+            <div class="feature-icon-wrapper">
+                <i data-lucide="image"></i>
+            </div>
+            <h3 class="feature-title">Visual Memory</h3>
+            <p class="feature-desc">Struggling to remember a word? Generate an image based on selected text. Creating visual associations is a proven way to lock new vocabulary into your long-term memory.</p>
+        </div>
+
+        <div class="card feature-card">
+            <div class="feature-icon-wrapper">
+                <i data-lucide="volume-2"></i>
+            </div>
+            <h3 class="feature-title">Perfect Pronunciation</h3>
+            <p class="feature-desc">Never guess how a word sounds. Use high-fidelity Text-to-Speech to hear the correct pronunciation, improving your listening skills and speaking confidence.</p>
+        </div>
+    </div>
+
+    <div class="tech-badge">
+        <i data-lucide="sparkles"></i> Powered by Google AI Services
+    </div>
 </main>
 
 <script src="../js/common.js"></script>
