@@ -202,7 +202,7 @@ public class AiService {
                                         VoiceConfig.builder()
                                                 .prebuiltVoiceConfig(
                                                         PrebuiltVoiceConfig.builder()
-                                                                .voiceName("Kore") // you can change later
+                                                                .voiceName("Kore")
                                                                 .build()
                                                 )
                                                 .build()
