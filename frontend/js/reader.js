@@ -42,10 +42,8 @@ function renderText(text) {
         return;
     }
 
-    // Preserve newlines
-    const withLineBreaks = text.replace(/\n/g, "<br>");
-
-    const tokens = withLineBreaks.split(/([\w'-]+)/g);
+    // Split into tokens (words vs non‑words)
+    const tokens = text.split(/([\w'-]+)/g);
 
     textContainer.innerHTML = tokens.map(token => {
         if (/([\w'-]+)/g.test(token)) {
@@ -87,7 +85,7 @@ function loadToolData(data) {
         data.audios.forEach(audio => {
             toolState.audio.history.push({
                 // CORRECT
-                word: audio.selectedText,
+                word: audio.text,
                 result: `http://localhost:8080/api/content/audio/${audio.minioObjectKey}`
             });
         });
@@ -135,6 +133,8 @@ textContainer.addEventListener('click', (e) => {
         selectedWordDisplay.innerHTML = `Selected: <strong style="color: var(--primary); font-size: 1.2rem;">${currentSelectedWord}</strong>`;
         selectedWordDisplay.classList.remove('text-muted');
     }
+
+    updateToolButtonsState();
 });
 
 // 3. Tool Generation Logic (Updated to store word in history)
@@ -167,10 +167,27 @@ function renderToolState(toolKey) {
     const resultArea = document.getElementById(`${toolKey}-result`);
     const pagination = document.getElementById(`${toolKey}-pagination`);
 
+    // Elements for the image word label
+    const imageWordDisplay = document.getElementById('image-word-display');
+    const imageWordText = document.getElementById('image-word-text');
+
     if (state.history.length === 0) {
         resultArea.classList.add('empty');
-        resultArea.innerHTML = `No ${toolKey} yet`;
+
+        // FIX: Use correct grammar for empty states instead of raw toolKey strings
+        const emptyMessages = {
+            'translate': 'No translations yet',
+            'image': 'No images yet',
+            'audio': 'No audio yet'
+        };
+        resultArea.innerHTML = emptyMessages[toolKey];
+
         pagination.classList.add('hidden');
+
+        // Hide badge if there are no images
+        if (toolKey === 'image' && imageWordDisplay) {
+            imageWordDisplay.classList.add('hidden');
+        }
         return;
     }
 
@@ -182,8 +199,13 @@ function renderToolState(toolKey) {
         resultArea.innerHTML = `<p class="text-left-align">${currentEntry.result}</p>`;
     } else if (toolKey === 'image') {
         resultArea.innerHTML = `<img src="${currentEntry.result}" class="generated-image">`;
+
+        // Update and show the elegant badge
+        if (imageWordDisplay && imageWordText) {
+            imageWordText.textContent = currentEntry.word;
+            imageWordDisplay.classList.remove('hidden');
+        }
     } else if (toolKey === 'audio') {
-        // SYNC: Button now shows the word stored in history, not the current global selection
         resultArea.innerHTML = `
             <button class="generated-audio-btn" data-audio="${currentEntry.result}">
                 <i data-lucide="play-circle"></i> Play "${currentEntry.word}"
@@ -192,7 +214,6 @@ function renderToolState(toolKey) {
 
         lucide.createIcons();
 
-        // Add play behavior
         const btn = resultArea.querySelector('.generated-audio-btn');
         btn.addEventListener('click', () => {
             const audio = new Audio(btn.dataset.audio);
@@ -223,8 +244,8 @@ function getContextSentence(clickedElement) {
     const sentencesBefore = textBefore.match(/[^.!?]+[.!?]+/g) || [];
     const index = sentencesBefore.length;
 
-    // Get current + 4 previous sentences
-    const start = Math.max(0, index - 4);
+    // Get current + 6 previous sentences
+    const start = Math.max(0, index - 6);
     const contextSentences = sentences.slice(start, index + 1);
 
     return contextSentences.join(' ').trim();
@@ -415,6 +436,20 @@ function showToast(message, type = 'info', icon = 'info') {
     lucide.createIcons();
     if (type !== 'info') setTimeout(() => toastContainer.classList.add('hidden'), 3500);
 }
+
+const translateBtn = document.getElementById('btn-translate');
+const imageBtn = document.getElementById('btn-image');
+const audioBtn = document.getElementById('btn-audio');
+
+function updateToolButtonsState() {
+    const hasSelection = !!currentSelectedWord;
+
+    translateBtn.disabled = !hasSelection;
+    imageBtn.disabled = !hasSelection;
+    audioBtn.disabled = !hasSelection;
+}
+
+updateToolButtonsState();
 
 // Initialize on load
 fetchContent();

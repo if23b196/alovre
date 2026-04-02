@@ -55,6 +55,9 @@ contentNameInput.addEventListener('input', () => {
         nameError.classList.add('hidden');
         contentNameInput.style.borderColor = '';
     }
+
+    updateUploadTextButtonState();
+    updateDropzoneState();
 });
 
 textInput.addEventListener('input', () => {
@@ -62,6 +65,8 @@ textInput.addEventListener('input', () => {
         textError.classList.add('hidden');
         textInput.style.borderColor = '';
     }
+
+    updateUploadTextButtonState();
 });
 
 fileUploadInput.addEventListener('change', async (e) => {
@@ -138,6 +143,14 @@ uploadTextBtn.addEventListener('click', async () => {
 
 // Add this to your upload.js
 dropzone.addEventListener('click', () => {
+    const hasName = contentNameInput.value.trim().length > 0;
+
+    if (!hasName) {
+        nameError.classList.remove('hidden');
+        contentNameInput.style.borderColor = 'var(--destructive)';
+        return; // prevent opening file dialog
+    }
+
     fileUploadInput.click();
 });
 
@@ -160,3 +173,16 @@ dropzone.addEventListener('drop', (e) => {
         fileUploadInput.dispatchEvent(new Event('change'));
     }
 });
+
+function updateUploadTextButtonState() {
+    const hasName = contentNameInput.value.trim().length > 0;
+    const hasText = textInput.value.trim().length > 0;
+
+    uploadTextBtn.disabled = !(hasName && hasText);
+}
+
+function updateDropzoneState() {
+    const hasName = contentNameInput.value.trim().length > 0;
+
+    dropzone.classList.toggle('disabled', !hasName);
+}

@@ -38,7 +38,9 @@
 
     <section class="tools-panel">
         <div class="selected-word-display card">
-            <p id="selected-word-text" class="text-muted">Select a word to use AI tools</p>
+            <p id="selected-word-text" class="text-muted">
+                Select a word from the text on the left side to use AI tools!
+            </p>
         </div>
 
         <div class="tool-card card">
@@ -73,9 +75,15 @@
 
         <div class="tool-card card">
             <div class="tool-header-row">
-                <button id="btn-image" class="tool-trigger-btn">
-                    <i data-lucide="image"></i> Image
-                </button>
+                <div class="tool-group">
+                    <button id="btn-image" class="tool-trigger-btn">
+                        <i data-lucide="image"></i> Image
+                    </button>
+                    <div id="image-word-display" class="word-badge hidden">
+                        <i data-lucide="tag" class="badge-icon"></i>
+                        <span id="image-word-text"></span>
+                    </div>
+                </div>
                 <div class="pagination hidden" id="image-pagination">
                     <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>
                     <span class="page-counter">1 / 1</span>
@@ -90,7 +98,7 @@
         <div class="tool-card card">
             <div class="tool-header-row">
                 <button id="btn-audio" class="tool-trigger-btn">
-                    <i data-lucide="volume-2"></i> Text-to-Speech
+                    <i data-lucide="volume-2"></i> Pronounce
                 </button>
                 <div class="pagination hidden" id="audio-pagination">
                     <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>

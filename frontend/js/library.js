@@ -66,7 +66,7 @@ function renderTable(data) {
         let badgeLabel = 'FILE';
 
         switch (item.type) {
-            case 'PLAIN_TEXT':
+            case 'TEXT':
                 iconName = 'align-left';
                 badgeLabel = 'TEXT';
                 break;
@@ -93,7 +93,7 @@ function renderTable(data) {
         tr.innerHTML = `
             <td>
                 <a href="#" class="item-name">
-                    <i data-lucide="${iconName}" class="table-icon"></i> 
+                    <i data-lucide="${iconName}" class="table-icon ${item.type === 'PLAIN_TEXT' ? 'text-icon' : ''}"></i> 
                     <span class="item-name-text">${item.title}</span>
                 </a>
             </td>

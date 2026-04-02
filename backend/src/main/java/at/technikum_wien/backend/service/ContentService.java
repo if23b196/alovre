@@ -151,7 +151,6 @@ public class ContentService {
                         i.getGeneratedTimestamp()
                 ))
                 .toList();
-        // same for audio...
 
         return new ContentDetailResponse(
                 content.getId(),
