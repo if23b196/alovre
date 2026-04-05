@@ -5,9 +5,8 @@ const libraryTable = document.getElementById('library-table');
 const itemCountText = document.getElementById('item-count');
 
 let allItems = [];
-let activeRowId = null; // To track which item we are editing/deleting
+let activeRowId = null;
 
-// Formatting Helpers
 function formatSize(bytes) {
     if (!bytes) return '-';
     if (bytes < 1024) return bytes + ' B';
@@ -16,7 +15,6 @@ function formatSize(bytes) {
 
 function formatDate(timestampArray) {
     if (!timestampArray) return '-';
-    // Spring Boot often returns LocalDateTime as an array [YYYY, M, D, H, M, S]
     if (Array.isArray(timestampArray)) {
         const date = new Date(timestampArray[0], timestampArray[1] - 1, timestampArray[2]);
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -24,7 +22,6 @@ function formatDate(timestampArray) {
     return new Date(timestampArray).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-// --- Fetch & Polling ---
 async function fetchLibraryData() {
     try {
         const response = await fetch(API_BASE_URL);
@@ -32,7 +29,6 @@ async function fetchLibraryData() {
 
         const data = await response.json();
 
-        // Only re-render if count or data has changed to prevent UI flicker
         if (JSON.stringify(data) !== JSON.stringify(allItems)) {
             allItems = data;
             renderTable(allItems);
@@ -61,8 +57,12 @@ function renderTable(data) {
         tr.classList.add('library-item');
         tr.dataset.id = item.id;
 
-        // Logic to differentiate icons and badges based on type
-        let iconName = 'file';     // default fallback
+        // If not processed, add the processing class to disable interactions
+        if (!item.ocrProcessed) {
+            tr.classList.add('processing');
+        }
+
+        let iconName = 'file';
         let badgeLabel = 'FILE';
 
         switch (item.type) {
@@ -70,17 +70,14 @@ function renderTable(data) {
                 iconName = 'align-left';
                 badgeLabel = 'TEXT';
                 break;
-
             case 'PDF':
                 iconName = 'file-text';
                 badgeLabel = 'PDF';
                 break;
-
             case 'TXT':
                 iconName = 'file';
                 badgeLabel = 'TXT';
                 break;
-
             default:
                 iconName = 'file';
                 badgeLabel = item.type || 'FILE';
@@ -90,9 +87,17 @@ function renderTable(data) {
             ? `<td class="status-ready"><i data-lucide="check-circle-2"></i> Ready</td>`
             : `<td style="color: var(--muted-foreground)"><i data-lucide="loader-2" class="spin"></i> Processing</td>`;
 
+        // Only render action buttons if the item is fully processed
+        const actionsHtml = item.ocrProcessed
+            ? `<div class="action-buttons-wrapper">
+                   <button class="icon-btn edit-btn" title="Edit Name"><i data-lucide="pencil"></i></button>
+                   <button class="icon-btn delete-btn" title="Delete"><i data-lucide="trash-2"></i></button>
+               </div>`
+            : ``;
+
         tr.innerHTML = `
             <td>
-                <a href="#" class="item-name">
+                <a href="#" class="item-name" onclick="event.preventDefault();">
                     <i data-lucide="${iconName}" class="table-icon ${item.type === 'PLAIN_TEXT' ? 'text-icon' : ''}"></i> 
                     <span class="item-name-text">${item.title}</span>
                 </a>
@@ -102,10 +107,7 @@ function renderTable(data) {
             <td>${formatSize(item.fileSize)}</td>
             ${statusHtml}
             <td class="action-cell">
-                <div class="action-buttons-wrapper">
-                    <button class="icon-btn edit-btn" title="Edit Name"><i data-lucide="pencil"></i></button>
-                    <button class="icon-btn delete-btn" title="Delete"><i data-lucide="trash-2"></i></button>
-                </div>
+                ${actionsHtml}
             </td>
         `;
         libraryBody.appendChild(tr);
@@ -113,14 +115,12 @@ function renderTable(data) {
     lucide.createIcons();
 }
 
-// --- Search ---
 document.getElementById('search-input').addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
     const filtered = allItems.filter(item => item.title.toLowerCase().includes(searchTerm));
     renderTable(filtered);
 });
 
-// --- Modal Logic (Edit/Delete) ---
 const editModal = document.getElementById('edit-modal');
 const deleteModal = document.getElementById('delete-modal');
 const editNameInput = document.getElementById('edit-name-input');
@@ -130,28 +130,32 @@ libraryBody.addEventListener('click', (e) => {
     const row = e.target.closest('tr');
     if (!row) return;
 
+    // Do absolutely nothing if the item is still processing
+    if (row.classList.contains('processing')) return;
+
     const id = row.dataset.id;
     activeRowId = id;
 
-    if (e.target.closest('.item-name')) {
-        window.location.href = `reader.html?id=${id}`;
-        return;
-    }
-
+    // Handle Edit Button Click
     if (e.target.closest('.edit-btn')) {
         const currentName = row.querySelector('.item-name-text').textContent;
         editNameInput.value = currentName;
         editModal.classList.remove('hidden');
+        return;
     }
 
+    // Handle Delete Button Click
     if (e.target.closest('.delete-btn')) {
         const currentName = row.querySelector('.item-name-text').textContent;
         deleteItemNameText.textContent = currentName;
         deleteModal.classList.remove('hidden');
+        return;
     }
+
+    // If it's not a processing row, and not an action button, open the document
+    window.location.href = `reader.html?id=${id}`;
 });
 
-// Modal Close logic
 [document.getElementById('cancel-edit-btn'), document.getElementById('cancel-delete-btn')].forEach(btn => {
     btn.addEventListener('click', () => {
         editModal.classList.add('hidden');
@@ -190,6 +194,5 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     }
 });
 
-// Initial Load & Polling
 fetchLibraryData();
 setInterval(fetchLibraryData, 5000);

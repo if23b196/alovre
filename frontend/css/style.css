@@ -177,7 +177,14 @@ tr:last-child td:first-child { border-bottom-left-radius: 1rem; }
 tr:last-child td:last-child { border-bottom-right-radius: 1rem; }
 
 /* Table Row Hover Highlight (Sharp corners) */
-.library-item { transition: background-color 0.2s; position: relative; }
+/* Table Row Hover Highlight & Processing State */
+.library-item { transition: background-color 0.2s, opacity 0.2s; position: relative; cursor: pointer; }
+.library-item:not(.processing):hover td { background-color: var(--row-hover); color: var(--foreground); border-bottom-color: transparent; }
+
+/* Disabled / Processing state styling */
+.library-item.processing { cursor: not-allowed; opacity: 0.65; }
+.library-item.processing a { cursor: not-allowed; }
+.library-item.processing:hover td { background-color: transparent; /* prevents hover color change */ }
 .library-item:hover td { background-color: var(--row-hover); color: var(--foreground); border-bottom-color: transparent; }
 
 .item-name { display: flex; align-items: center; gap: 0.75rem; color: var(--foreground); text-decoration: none; font-weight: 500; }
@@ -223,6 +230,21 @@ tr:last-child td:last-child { border-bottom-right-radius: 1rem; }
 .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; }
 .modal-actions button { margin-top: 0; width: auto; }
 .text-destructive { color: var(--destructive); }
+/* Modals */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+.modal-content { width: 100%; max-width: 450px; padding: 2.5rem; }
+.modal-title { display: flex; align-items: center; gap: 0.75rem; }
+.modal-icon { width: 24px; height: 24px; }
+.modal-content p { margin-bottom: 1.5rem; }
+.modal-content input { margin-bottom: 1.5rem; width: 100%; }
+.modal-actions { display: flex; gap: 1rem; justify-content: flex-end; }
+.modal-actions button { margin-top: 0; width: auto; }
+.text-destructive { color: var(--destructive); }
+
+/* Spacing fix specifically for the Delete Modal actions */
+#delete-modal .modal-actions {
+    gap: 2rem;
+}
 
 /* Navbar styles for buttons */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid var(--border); background-color: var(--card); }
@@ -478,7 +500,7 @@ body.reader-mode .navbar {
     border: 1px solid var(--border);
 
     /* Increased padding-left to 2.8rem to accommodate the larger icon */
-    padding: 0 1.5rem 0 2.8rem;
+    padding: 0 0 0 2.8rem;
     height: 100%;
     border-radius: 1.5rem;
     font-size: 1rem; /* Match the 1rem of .tool-trigger-btn */
