@@ -133,7 +133,6 @@ libraryBody.addEventListener('click', (e) => {
     const id = row.dataset.id;
     activeRowId = id;
 
-    // NEW: redirect when clicking name (or row, your choice)
     if (e.target.closest('.item-name')) {
         window.location.href = `reader.html?id=${id}`;
         return;

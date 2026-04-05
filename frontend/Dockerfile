@@ -12,7 +12,7 @@ WORKDIR /usr/share/nginx/html
 # Remove default Nginx "Welcome to nginx!" files
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy your static frontend files into the nginx web root
+# Copy static frontend files into the nginx web root
 # (HTML pages go into the root directly)
 COPY ./html /usr/share/nginx/html
 
@@ -20,12 +20,11 @@ COPY ./html /usr/share/nginx/html
 COPY ./css /usr/share/nginx/html/css
 COPY ./js /usr/share/nginx/html/js
 
-# Copy your custom nginx configuration file
 # (this overrides the default one inside the container)
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 inside the container
-# (so docker-compose can map it to your host port 8080)
+# (so docker-compose can map it to host port 8080)
 EXPOSE 80
 
 # Run nginx in the foreground (daemon off) so Docker can manage it

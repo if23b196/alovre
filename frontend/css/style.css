@@ -37,6 +37,45 @@
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/*:root {*/
+/*    --font-size: 16px;*/
+
+/*    !* Deep warm background — more peach/rose *!*/
+/*    --background: #f6cdbd; !* softer, pink‑peach *!*/
+/*    --foreground: #4a2a1f;*/
+
+/*    !* Cards — warmer cream with a blush tint *!*/
+/*    --card: #fbe1d6;*/
+/*    --card-foreground: #4a2a1f;*/
+
+/*    !* Primary — deeper terracotta with a hint of rose *!*/
+/*    --primary: #c96a45;*/
+/*    --primary-foreground: #fff7f3;*/
+
+/*    !* Secondary — warm peach with subtle pink *!*/
+/*    --secondary: #efc2ad;*/
+/*    --secondary-foreground: #4a2a1f;*/
+
+/*    !* Muted & Hovers — warmer, more orange‑rose *!*/
+/*    --muted: #e3a47f;*/
+/*    --muted-foreground: #704b38;*/
+/*    --row-hover: #e3a47f;*/
+
+/*    !* Borders — slightly warmer tint *!*/
+/*    --border: rgba(201, 106, 69, 0.28);*/
+
+/*    !* Inputs — creamy peach *!*/
+/*    --input-background: #f8d9c8;*/
+
+/*    !* Destructive — slightly more coral *!*/
+/*    --destructive: #dd5a4a;*/
+/*    --destructive-foreground: #ffffff;*/
+
+/*    !* Soft rounded corners *!*/
+/*    --radius: 1.75rem;*/
+/*    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;*/
+/*}*/
+
 .dark {
     /* Dark Mode */
     --background: #2b1c15;
@@ -185,13 +224,12 @@ tr:last-child td:last-child { border-bottom-right-radius: 1rem; }
 .modal-actions button { margin-top: 0; width: auto; }
 .text-destructive { color: var(--destructive); }
 
-/* Update Navbar styles for the new buttons */
+/* Navbar styles for buttons */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid var(--border); background-color: var(--card); }
 .logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; color: var(--primary); font-weight: 500; text-decoration: none; }
 .nav-actions { display: flex; align-items: center; gap: 1rem; }
 .nav-btn { text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.95rem; border-radius: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; transition: all 0.2s; }
 
-/* Adjust anchor buttons to match your button variables */
 a.btn-primary { background-color: var(--primary); color: var(--primary-foreground); }
 a.btn-primary:hover { opacity: 0.9; }
 a.btn-secondary { background-color: var(--secondary); color: var(--secondary-foreground); }
@@ -327,7 +365,7 @@ body.reader-mode .navbar {
 /* Compact Tool Header (Button + Pagination) */
 .tool-header-row { display: flex; justify-content: space-between; align-items: center; }
 
-/* New Title Button */
+/* Title Button */
 .tool-trigger-btn {
     display: inline-flex; align-items: center; gap: 0.6rem;
     background: transparent; color: var(--primary);

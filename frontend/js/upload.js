@@ -1,5 +1,6 @@
 const API_BASE_URL = 'http://localhost:8080/api/content';
 
+// Existing Elements
 const tabs = document.querySelectorAll('.tab');
 const uploadDocSection = document.getElementById('upload-document-section');
 const uploadTextSection = document.getElementById('upload-text-section');
@@ -14,7 +15,15 @@ const textError = document.getElementById('text-error');
 const toastContainer = document.getElementById('toast-container');
 const toastMessage = document.getElementById('toast-message');
 
-// Tab Switching
+// New Elements for Document Review Logic
+const uploadDocBtn = document.getElementById('upload-document-btn');
+const filePreview = document.getElementById('file-preview');
+const fileNameDisplay = document.getElementById('file-name-display');
+const removeFileBtn = document.getElementById('remove-file-btn');
+
+let selectedFile = null; // Holds the file before manual upload
+
+// --- Tab Switching ---
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
@@ -29,7 +38,7 @@ tabs.forEach(tab => {
     });
 });
 
-// Validation
+// --- Validation & UI Helpers ---
 function validateContentName() {
     const name = contentNameInput.value.trim();
     if (!name) {
@@ -41,7 +50,7 @@ function validateContentName() {
 }
 
 function showToast(message, type = 'info', icon = 'info') {
-    if (!toastContainer) return; // safeguard
+    if (!toastContainer) return;
     toastContainer.classList.remove('hidden');
     toastMessage.className = `toast ${type}`;
     const iconClass = icon === 'loader-2' ? 'spin' : '';
@@ -50,13 +59,31 @@ function showToast(message, type = 'info', icon = 'info') {
     if (type !== 'info') setTimeout(() => toastContainer.classList.add('hidden'), 3500);
 }
 
+function updateUploadTextButtonState() {
+    const hasName = contentNameInput.value.trim().length > 0;
+    const hasText = textInput.value.trim().length > 0;
+    uploadTextBtn.disabled = !(hasName && hasText);
+}
+
+function updateUploadDocButtonState() {
+    const hasName = contentNameInput.value.trim().length > 0;
+    const hasFile = selectedFile !== null;
+    uploadDocBtn.disabled = !(hasName && hasFile);
+}
+
+function updateDropzoneState() {
+    const hasName = contentNameInput.value.trim().length > 0;
+    dropzone.classList.toggle('disabled', !hasName);
+}
+
+// --- Input Listeners ---
 contentNameInput.addEventListener('input', () => {
     if (contentNameInput.value.trim()) {
         nameError.classList.add('hidden');
         contentNameInput.style.borderColor = '';
     }
-
     updateUploadTextButtonState();
+    updateUploadDocButtonState();
     updateDropzoneState();
 });
 
@@ -65,96 +92,45 @@ textInput.addEventListener('input', () => {
         textError.classList.add('hidden');
         textInput.style.borderColor = '';
     }
-
     updateUploadTextButtonState();
 });
 
-fileUploadInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
+// --- Document Selection Logic (The Review Part) ---
+function handleFileSelection(file) {
     if (!file) return;
-    const title = validateContentName();
-    if (!title) return;
 
-    const language = languageSelect.value; // GET LANGUAGE
+    // Validate File Type
+    const isPdf = file.type === 'application/pdf';
+    const isTxt = file.type === 'text/plain' || file.name.toLowerCase().endsWith('.txt');
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('file', file);
-    formData.append('language', language);
+    if (isPdf || isTxt) {
+        selectedFile = file;
 
-    showToast('Uploading document...', 'info', 'loader-2');
+        // Show Preview UI
+        dropzone.classList.add('hidden');
+        filePreview.classList.remove('hidden');
+        fileNameDisplay.textContent = file.name;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/upload/document`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            window.location.href = 'library.html';
-        } else {
-            showToast("Failed to upload document.", "error", "alert-circle");
-        }
-    } catch (error) {
-        console.error("Error uploading document:", error);
-        showToast("Server error.", "error", "alert-circle");
+        lucide.createIcons(); // Refresh 'X' icon
+        updateUploadDocButtonState();
+    } else {
+        showToast("Only PDF and TXT files are allowed.", "error", "alert-circle");
+        fileUploadInput.value = '';
     }
+}
+
+// Remove File Action
+removeFileBtn.addEventListener('click', () => {
+    selectedFile = null;
     fileUploadInput.value = '';
+    filePreview.classList.add('hidden');
+    dropzone.classList.remove('hidden');
+    updateUploadDocButtonState();
 });
 
-// 2. Upload Raw Text (JSON)
-uploadTextBtn.addEventListener('click', async () => {
-    const title = validateContentName();
-    if (!title) return;
+// Drag and Drop Listeners
+dropzone.addEventListener('click', () => fileUploadInput.click());
 
-    const text = textInput.value.trim();
-    const language = languageSelect.value; // GET LANGUAGE
-
-    if (!text) {
-        textError.classList.remove('hidden');
-        textInput.style.borderColor = 'var(--destructive)';
-        return;
-    }
-
-    showToast('Uploading text...', 'info', 'loader-2');
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/upload/text`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // ADD LANGUAGE TO JSON BODY
-            body: JSON.stringify({
-                title: title,
-                text: text,
-                language: language
-            })
-        });
-
-        if (response.ok) {
-            window.location.href = 'library.html';
-        } else {
-            showToast("Failed to upload text.", "error", "alert-circle");
-        }
-    } catch (error) {
-        console.error("Error uploading text:", error);
-        showToast("Server error.", "error", "alert-circle");
-    }
-});
-
-// Add this to your upload.js
-dropzone.addEventListener('click', () => {
-    const hasName = contentNameInput.value.trim().length > 0;
-
-    if (!hasName) {
-        nameError.classList.remove('hidden');
-        contentNameInput.style.borderColor = 'var(--destructive)';
-        return; // prevent opening file dialog
-    }
-
-    fileUploadInput.click();
-});
-
-// Optional: Add drag and drop support while you're at it
 dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
     dropzone.style.borderColor = 'var(--primary)';
@@ -168,21 +144,82 @@ dropzone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropzone.style.borderColor = 'var(--border)';
     if (e.dataTransfer.files.length) {
-        fileUploadInput.files = e.dataTransfer.files;
-        // Trigger the change event manually since setting .files doesn't fire it
-        fileUploadInput.dispatchEvent(new Event('change'));
+        handleFileSelection(e.dataTransfer.files[0]);
     }
 });
 
-function updateUploadTextButtonState() {
-    const hasName = contentNameInput.value.trim().length > 0;
-    const hasText = textInput.value.trim().length > 0;
+fileUploadInput.addEventListener('change', (e) => {
+    handleFileSelection(e.target.files[0]);
+});
 
-    uploadTextBtn.disabled = !(hasName && hasText);
-}
+// --- Final Upload Actions ---
 
-function updateDropzoneState() {
-    const hasName = contentNameInput.value.trim().length > 0;
+// 1. Upload Document
+uploadDocBtn.addEventListener('click', async () => {
+    const title = validateContentName();
+    if (!title || !selectedFile) return;
 
-    dropzone.classList.toggle('disabled', !hasName);
-}
+    const language = languageSelect.value;
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('file', selectedFile);
+    formData.append('language', language);
+
+    showToast('Uploading document...', 'info', 'loader-2');
+    uploadDocBtn.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/upload/document`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            window.location.href = 'library.html';
+        } else {
+            showToast("Failed to upload document.", "error", "alert-circle");
+            uploadDocBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error("Error uploading document:", error);
+        showToast("Server error.", "error", "alert-circle");
+        uploadDocBtn.disabled = false;
+    }
+});
+
+// 2. Upload Plain Text
+uploadTextBtn.addEventListener('click', async () => {
+    const title = validateContentName();
+    const text = textInput.value.trim();
+    const language = languageSelect.value;
+
+    if (!title || !text) {
+        if (!text) {
+            textError.classList.remove('hidden');
+            textInput.style.borderColor = 'var(--destructive)';
+        }
+        return;
+    }
+
+    showToast('Uploading text...', 'info', 'loader-2');
+    uploadTextBtn.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/upload/text`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, text, language })
+        });
+
+        if (response.ok) {
+            window.location.href = 'library.html';
+        } else {
+            showToast("Failed to upload text.", "error", "alert-circle");
+            uploadTextBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error("Error uploading text:", error);
+        showToast("Server error.", "error", "alert-circle");
+        uploadTextBtn.disabled = false;
+    }
+});

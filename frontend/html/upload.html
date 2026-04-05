@@ -59,11 +59,26 @@
 
         <div id="upload-document-section">
             <input type="file" id="file-upload" class="hidden" accept=".pdf,.txt">
+
             <div class="dropzone" id="dropzone">
                 <i data-lucide="upload" class="upload-icon"></i>
                 <p>Click to upload or drag and drop</p>
                 <span class="file-hint">PDF, TXT files</span>
             </div>
+
+            <div id="file-preview" class="hidden" style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem; border: 1px solid var(--border); border-radius: 1.25rem; background-color: var(--input-background); margin-top: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i data-lucide="file-text" style="color: var(--primary);"></i>
+                    <span id="file-name-display" style="font-weight: 500; color: var(--foreground);"></span>
+                </div>
+                <button id="remove-file-btn" class="icon-btn" style="color: var(--destructive); background-color: var(--card);" title="Remove file">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <button id="upload-document-btn" class="btn-primary" disabled style="margin-top: 1rem;">
+                <i data-lucide="upload-cloud"></i> Upload Document
+            </button>
         </div>
 
         <div id="upload-text-section" class="hidden">
