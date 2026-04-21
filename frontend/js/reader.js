@@ -1,5 +1,78 @@
 const API_BASE_URL = 'http://localhost:8080/api/content';
 
+/**
+ * Helper to get a translation from common.js
+ */
+function getTranslation(key) {
+    if (typeof window.applyTranslations !== 'function') return key;
+    const lang = localStorage.getItem('language') || 'en';
+    // This is a bit of a hack since we don't export the translations object,
+    // but we can temporarily call applyTranslations or just trust the keys
+    // For now, let's just use a simple lookup if possible or re-define what we need
+    // Better: let's hope common.js is already loaded.
+    // Actually, we can just access the translations if we modify common.js to expose them.
+    // Or we can just re-implement a minimal version here for the dynamic parts.
+    const translations = {
+        en: {
+            readerSelectedLabel: 'Selected',
+            translateEmpty: 'No translations yet',
+            imageEmpty: 'No images yet',
+            audioEmpty: 'No audio yet',
+            btnPlay: 'Play',
+            toastTranslating: 'Translating to',
+            toastGeneratingImage: 'Generating image...',
+            toastGeneratingAudio: 'Generating audio...',
+            toastTranslationReady: 'Translation ready!',
+            toastImageReady: 'Image ready!',
+            toastAudioReady: 'Audio ready!',
+            toastTranslationFailed: 'Translation failed',
+            toastImageFailed: 'Image generation failed',
+            toastAudioFailed: 'Audio generation failed',
+            toastSelectWordFirst: 'Please select a word first.',
+            toastNoWordSelected: 'No word selected'
+        },
+        de: {
+            readerSelectedLabel: 'Ausgewählt',
+            translateEmpty: 'Noch keine Übersetzungen',
+            imageEmpty: 'Noch keine Bilder',
+            audioEmpty: 'Noch keine Audioaufnahmen',
+            btnPlay: 'Abspielen',
+            toastTranslating: 'Übersetze nach',
+            toastGeneratingImage: 'Bild wird generiert...',
+            toastGeneratingAudio: 'Audio wird generiert...',
+            toastTranslationReady: 'Übersetzung bereit!',
+            toastImageReady: 'Bild bereit!',
+            toastAudioReady: 'Audio bereit!',
+            toastTranslationFailed: 'Übersetzung fehlgeschlagen',
+            toastImageFailed: 'Bildgenerierung fehlgeschlagen',
+            toastAudioFailed: 'Audiogenerierung fehlgeschlagen',
+            toastSelectWordFirst: 'Bitte wählen Sie zuerst ein Wort aus.',
+            toastNoWordSelected: 'Kein Wort ausgewählt'
+        },
+        es: {
+            readerSelectedLabel: 'Seleccionado',
+            translateEmpty: 'Aún no hay traducciones',
+            imageEmpty: 'Aún no hay imágenes',
+            audioEmpty: 'Aún no hay audios',
+            btnPlay: 'Reproducir',
+            toastTranslating: 'Traduciendo al',
+            toastGeneratingImage: 'Generando imagen...',
+            toastGeneratingAudio: 'Generando audio...',
+            toastTranslationReady: '¡Traducción lista!',
+            toastImageReady: '¡Imagen lista!',
+            toastAudioReady: '¡Audio listo!',
+            toastTranslationFailed: 'Error en la traducción',
+            toastImageFailed: 'Error al generar la imagen',
+            toastAudioFailed: 'Error al generar el audio',
+            toastTranslationReady: '¡Traducción lista!',
+            toastSelectWordFirst: 'Por favor, selecciona primero una palabra.',
+            toastNoWordSelected: 'Ninguna palabra seleccionada'
+        }
+    };
+    const langData = translations[lang] || translations.en;
+    return langData[key] || key;
+}
+
 function getContentIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
     return params.get('id');
@@ -130,7 +203,7 @@ textContainer.addEventListener('click', (e) => {
         e.target.classList.add('selected');
 
         // Update Side Panel
-        selectedWordDisplay.innerHTML = `Selected: <strong style="color: var(--primary); font-size: 1.2rem;">${currentSelectedWord}</strong>`;
+        selectedWordDisplay.innerHTML = `${getTranslation('readerSelectedLabel')}: <strong style="color: var(--primary); font-size: 1.2rem;">${currentSelectedWord}</strong>`;
         selectedWordDisplay.classList.remove('text-muted');
     }
 
@@ -140,7 +213,7 @@ textContainer.addEventListener('click', (e) => {
 // 3. Tool Generation Logic (Updated to store word in history)
 function handleGenerate(toolKey, generatorFunction) {
     if (!currentSelectedWord) {
-        showToast('Please select a word first.', 'error', 'alert-circle');
+        showToast(getTranslation('toastSelectWordFirst'), 'error', 'alert-circle');
         return;
     }
 
@@ -176,9 +249,9 @@ function renderToolState(toolKey) {
 
         // FIX: Use correct grammar for empty states instead of raw toolKey strings
         const emptyMessages = {
-            'translate': 'No translations yet',
-            'image': 'No images yet',
-            'audio': 'No audio yet'
+            'translate': getTranslation('translateEmpty'),
+            'image': getTranslation('imageEmpty'),
+            'audio': getTranslation('audioEmpty')
         };
         resultArea.innerHTML = emptyMessages[toolKey];
 
@@ -208,7 +281,7 @@ function renderToolState(toolKey) {
     } else if (toolKey === 'audio') {
         resultArea.innerHTML = `
             <button class="generated-audio-btn" data-audio="${currentEntry.result}">
-                <i data-lucide="play-circle"></i> Play "${currentEntry.word}"
+                <i data-lucide="play-circle"></i> ${getTranslation('btnPlay')} "${currentEntry.word}"
             </button>
         `;
 
@@ -255,7 +328,7 @@ function getContextSentence(clickedElement) {
 // (Ensure handleGenerate calls match the new storage format)
 document.getElementById('btn-translate').addEventListener('click', async () => {
     if (!currentSelectedWord) {
-        showToast('Please select a word first.', 'error', 'alert-circle');
+        showToast(getTranslation('toastSelectWordFirst'), 'error', 'alert-circle');
         return;
     }
 
@@ -263,7 +336,7 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
     const targetLanguage = document.getElementById('language-picker').value; // Get selected language
     const selectedElement = document.querySelector('.word.selected');
     if (!selectedElement) {
-        showToast('No word selected', 'error');
+        showToast(getTranslation('toastNoWordSelected'), 'error');
         return;
     }
     const context = getContextSentence(selectedElement);
@@ -278,7 +351,7 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
         Turkish: "Turkish"
     };
 
-    showToast(`Translating to ${langMap[targetLanguage]}...`, 'info', 'loader-2');
+    showToast(`${getTranslation('toastTranslating')} ${langMap[targetLanguage]}...`, 'info', 'loader-2');
 
     try {
         const response = await fetch('http://localhost:8080/api/ai/explain', {
@@ -305,29 +378,29 @@ document.getElementById('btn-translate').addEventListener('click', async () => {
 
         toolState.translate.currentIndex = toolState.translate.history.length - 1;
         renderToolState('translate');
-        showToast('Translation ready!', 'success', 'check-circle-2');
+        showToast(getTranslation('toastTranslationReady'), 'success', 'check-circle-2');
 
     } catch (error) {
         console.error(error);
-        showToast('Translation failed', 'error', 'alert-circle');
+        showToast(getTranslation('toastTranslationFailed'), 'error', 'alert-circle');
     }
 });
 
 document.getElementById('btn-image').addEventListener('click', async () => {
     if (!currentSelectedWord) {
-        showToast('Please select a word first.', 'error', 'alert-circle');
+        showToast(getTranslation('toastSelectWordFirst'), 'error', 'alert-circle');
         return;
     }
 
     const contentId = getContentIdFromUrl();
     const selectedElement = document.querySelector('.word.selected');
     if (!selectedElement) {
-        showToast('No word selected', 'error');
+        showToast(getTranslation('toastNoWordSelected'), 'error');
         return;
     }
     const context = getContextSentence(selectedElement);
 
-    showToast('Generating image...', 'info', 'loader-2');
+    showToast(getTranslation('toastGeneratingImage'), 'info', 'loader-2');
 
     try {
         const response = await fetch('http://localhost:8080/api/ai/image', {
@@ -354,23 +427,23 @@ document.getElementById('btn-image').addEventListener('click', async () => {
         toolState.image.currentIndex = toolState.image.history.length - 1;
         renderToolState('image');
 
-        showToast('Image ready!', 'success', 'check-circle-2');
+        showToast(getTranslation('toastImageReady'), 'success', 'check-circle-2');
 
     } catch (error) {
         console.error(error);
-        showToast('Image generation failed', 'error', 'alert-circle');
+        showToast(getTranslation('toastImageFailed'), 'error', 'alert-circle');
     }
 });
 
 document.getElementById('btn-audio').addEventListener('click', async () => {
     if (!currentSelectedWord) {
-        showToast('Please select a word first.', 'error', 'alert-circle');
+        showToast(getTranslation('toastSelectWordFirst'), 'error', 'alert-circle');
         return;
     }
 
     const contentId = getContentIdFromUrl();
 
-    showToast('Generating audio...', 'info', 'loader-2');
+    showToast(getTranslation('toastGeneratingAudio'), 'info', 'loader-2');
 
     try {
         const response = await fetch('http://localhost:8080/api/ai/tts', {
@@ -396,11 +469,11 @@ document.getElementById('btn-audio').addEventListener('click', async () => {
         toolState.audio.currentIndex = toolState.audio.history.length - 1;
         renderToolState('audio');
 
-        showToast('Audio ready!', 'success', 'check-circle-2');
+        showToast(getTranslation('toastAudioReady'), 'success', 'check-circle-2');
 
     } catch (error) {
         console.error(error);
-        showToast('Audio generation failed', 'error', 'alert-circle');
+        showToast(getTranslation('toastAudioFailed'), 'error', 'alert-circle');
     }
 });
 
@@ -450,6 +523,22 @@ function updateToolButtonsState() {
 }
 
 updateToolButtonsState();
+
+// Listen for language changes to update static text and re-render dynamic parts
+window.addEventListener('languageChanged', (e) => {
+    const lang = e.detail.language;
+    if (typeof window.applyTranslations === 'function') {
+        window.applyTranslations(lang);
+    }
+
+    // Re-render "Selected: word" display if something is selected
+    if (currentSelectedWord) {
+        selectedWordDisplay.innerHTML = `${getTranslation('readerSelectedLabel')}: <strong style="color: var(--primary); font-size: 1.2rem;">${currentSelectedWord}</strong>`;
+    }
+
+    // Re-render tool results (empty states, Play buttons)
+    ['translate', 'image', 'audio'].forEach(key => renderToolState(key));
+});
 
 // Initialize on load
 fetchContent();

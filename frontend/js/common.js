@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     languageSelect.addEventListener('change', (e) => {
                         const newLang = e.target.value;
                         localStorage.setItem('language', newLang);
-                        if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('upload.html') || window.location.pathname.endsWith('library.html')) {
+                        if (window.location.pathname.endsWith('index.html') || 
+                            window.location.pathname === '/' || 
+                            window.location.pathname.endsWith('/') || 
+                            window.location.pathname.endsWith('upload.html') || 
+                            window.location.pathname.endsWith('library.html') ||
+                            window.location.pathname.endsWith('reader.html')) {
                             applyTranslations(newLang);
                         }
                         // Dispatch a global event so other scripts can react to language change
@@ -38,8 +43,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 }
 
-                // Initial translation if on homepage, upload page or library page
-                if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('upload.html') || window.location.pathname.endsWith('library.html')) {
+                // Initial translation if on homepage, upload page, library page or reader page
+                if (window.location.pathname.endsWith('index.html') || 
+                    window.location.pathname === '/' || 
+                    window.location.pathname.endsWith('/') || 
+                    window.location.pathname.endsWith('upload.html') || 
+                    window.location.pathname.endsWith('library.html') ||
+                    window.location.pathname.endsWith('reader.html')) {
                     applyTranslations(currentLang);
                 }
 
@@ -62,6 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize lucide icons for elements already on the page (like modals)
     lucide.createIcons();
+
+    // Export functions to window object
+    window.applyTranslations = applyTranslations;
 
     function updateThemeIcon(btn) {
         if (!btn) return;
@@ -147,7 +160,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSave: 'Save Changes',
                 modalDeleteTitle: 'Delete Content',
                 deleteConfirmText: 'Are you sure you want to delete',
-                deleteUndoText: 'This cannot be undone.'
+                deleteUndoText: 'This cannot be undone.',
+                readerBackToLibrary: 'Back to Library',
+                readerSelectedPrompt: 'Select a word from the text on the left side to use AI tools!',
+                readerSelectedLabel: 'Selected',
+                btnTranslate: 'Translate & Explain',
+                btnImage: 'Image',
+                btnPronounce: 'Pronounce',
+                translateEmpty: 'No translations yet',
+                imageEmpty: 'No images yet',
+                audioEmpty: 'No audio yet',
+                btnPlay: 'Play',
+                toastTranslating: 'Translating to',
+                toastGeneratingImage: 'Generating image...',
+                toastGeneratingAudio: 'Generating audio...',
+                toastTranslationReady: 'Translation ready!',
+                toastImageReady: 'Image ready!',
+                toastAudioReady: 'Audio ready!',
+                toastTranslationFailed: 'Translation failed',
+                toastImageFailed: 'Image generation failed',
+                toastAudioFailed: 'Audio generation failed',
+                toastSelectWordFirst: 'Please select a word first.',
+                toastNoWordSelected: 'No word selected'
             },
             de: {
                 heroTitle: 'Lies, was du liebst.<br>Lerne eine Sprache natürlich.',
@@ -222,7 +256,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSave: 'Änderungen speichern',
                 modalDeleteTitle: 'Inhalt löschen',
                 deleteConfirmText: 'Sind Sie sicher, dass Sie löschen möchten',
-                deleteUndoText: 'Dies kann nicht rückgängig gemacht werden.'
+                deleteUndoText: 'Dies kann nicht rückgängig gemacht werden.',
+                readerBackToLibrary: 'Zurück zur Bibliothek',
+                readerSelectedPrompt: 'Wählen Sie ein Wort aus dem Text auf der linken Seite aus, um KI-Tools zu verwenden!',
+                readerSelectedLabel: 'Ausgewählt',
+                btnTranslate: 'Übersetzen & Erklären',
+                btnImage: 'Bild',
+                btnPronounce: 'Aussprache',
+                translateEmpty: 'Noch keine Übersetzungen',
+                imageEmpty: 'Noch keine Bilder',
+                audioEmpty: 'Noch keine Audioaufnahmen',
+                btnPlay: 'Abspielen',
+                toastTranslating: 'Übersetze nach',
+                toastGeneratingImage: 'Bild wird generiert...',
+                toastGeneratingAudio: 'Audio wird generiert...',
+                toastTranslationReady: 'Übersetzung bereit!',
+                toastImageReady: 'Bild bereit!',
+                toastAudioReady: 'Audio bereit!',
+                toastTranslationFailed: 'Übersetzung fehlgeschlagen',
+                toastImageFailed: 'Bildgenerierung fehlgeschlagen',
+                toastAudioFailed: 'Audiogenerierung fehlgeschlagen',
+                toastSelectWordFirst: 'Bitte wählen Sie zuerst ein Wort aus.',
+                toastNoWordSelected: 'Kein Wort ausgewählt'
             },
             es: {
                 heroTitle: 'Lee lo que amas.<br>Aprende un idioma de forma natural.',
@@ -297,7 +352,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSave: 'Guardar cambios',
                 modalDeleteTitle: 'Eliminar contenido',
                 deleteConfirmText: '¿Estás seguro de que quieres eliminar',
-                deleteUndoText: 'Esta acción no se puede deshacer.'
+                deleteUndoText: 'Esta acción no se puede deshacer.',
+                readerBackToLibrary: 'Volver a la biblioteca',
+                readerSelectedPrompt: '¡Selecciona una palabra del texto de la izquierda para usar las herramientas de IA!',
+                readerSelectedLabel: 'Seleccionado',
+                btnTranslate: 'Traducir y Explicar',
+                btnImage: 'Imagen',
+                btnPronounce: 'Pronunciar',
+                translateEmpty: 'Aún no hay traducciones',
+                imageEmpty: 'Aún no hay imágenes',
+                audioEmpty: 'Aún no hay audios',
+                btnPlay: 'Reproducir',
+                toastTranslating: 'Traduciendo al',
+                toastGeneratingImage: 'Generando imagen...',
+                toastGeneratingAudio: 'Generando audio...',
+                toastTranslationReady: '¡Traducción lista!',
+                toastImageReady: '¡Imagen lista!',
+                toastAudioReady: '¡Audio listo!',
+                toastTranslationFailed: 'Error en la traducción',
+                toastImageFailed: 'Error al generar la imagen',
+                toastAudioFailed: 'Error al generar el audio',
+                toastSelectWordFirst: 'Por favor, selecciona primero una palabra.',
+                toastNoWordSelected: 'Ninguna palabra seleccionada'
             }
         };
 
@@ -491,6 +567,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
         if (confirmDeleteBtn) confirmDeleteBtn.textContent = t.btnDelete;
+
+        // Reader Page
+        const backToLibBtn = document.querySelector('.reader-header .btn-icon');
+        if (backToLibBtn) backToLibBtn.title = t.readerBackToLibrary;
+
+        const selectedWordPrompt = document.getElementById('selected-word-text');
+        if (selectedWordPrompt && !selectedWordPrompt.querySelector('strong')) {
+            selectedWordPrompt.textContent = t.readerSelectedPrompt;
+        }
+
+        const translateBtn = document.getElementById('btn-translate');
+        if (translateBtn) {
+            translateBtn.innerHTML = `<i data-lucide="languages"></i> ${t.btnTranslate}`;
+        }
+
+        const imageBtn = document.getElementById('btn-image');
+        if (imageBtn) {
+            imageBtn.innerHTML = `<i data-lucide="image"></i> ${t.btnImage}`;
+        }
+
+        const audioBtn = document.getElementById('btn-audio');
+        if (audioBtn) {
+            audioBtn.innerHTML = `<i data-lucide="volume-2"></i> ${t.btnPronounce}`;
+        }
 
         // Re-run lucide to restore icons in modified elements
         lucide.createIcons();
