@@ -21,9 +21,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     languageSelect.addEventListener('change', (e) => {
                         const newLang = e.target.value;
                         localStorage.setItem('language', newLang);
-                        if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+                        if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('upload.html') || window.location.pathname.endsWith('library.html')) {
                             applyTranslations(newLang);
                         }
+                        // Dispatch a global event so other scripts can react to language change
+                        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: newLang } }));
                     });
                 }
 
@@ -36,8 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 }
 
-                // Initial translation if on homepage
-                if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+                // Initial translation if on homepage, upload page or library page
+                if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('upload.html') || window.location.pathname.endsWith('library.html')) {
                     applyTranslations(currentLang);
                 }
 
@@ -104,7 +106,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 faq4PronounceDesc: 'Hear the word read aloud by clicking the generated Play button.',
                 navUpload: 'Upload',
                 navLibrary: 'Library',
-                techBadge: 'Powered by Google AI Services'
+                techBadge: 'Powered by Google AI Services',
+                uploadTitle: 'Upload Content',
+                labelContentName: 'Content Name',
+                placeholderContentName: 'Enter a name for your content...',
+                errorContentName: 'Please provide a name for your content first.',
+                labelContentLanguage: 'Content Language',
+                tabDocument: 'Document',
+                tabPlainText: 'Plain Text',
+                dropzoneText: 'Click to upload or drag and drop',
+                fileHint: 'PDF, TXT files',
+                btnUploadDocument: 'Upload Document',
+                placeholderPlainText: 'Type or paste your plain text here...',
+                errorPlainText: 'Please enter some text before uploading.',
+                btnUploadText: 'Upload Text',
+                toastUploadingDoc: 'Uploading document...',
+                toastUploadingText: 'Uploading text...',
+                errorOnlyPdfTxt: 'Only PDF and TXT files are allowed.',
+                errorUploadFail: 'Failed to upload document.',
+                errorUploadTextFail: 'Failed to upload text.',
+                errorServer: 'Server error.',
+                libraryTitle: 'Your Library',
+                itemCount0: '0 items',
+                itemCount1: '1 item',
+                itemCountMany: 'items',
+                placeholderSearch: 'Search your library...',
+                emptyStateText: 'No documents uploaded yet. Upload your first document to get started.',
+                thName: 'Name',
+                thType: 'Type',
+                thDate: 'Date',
+                thSize: 'Size',
+                thStatus: 'Status',
+                statusReady: 'Ready',
+                statusProcessing: 'Processing',
+                btnEditName: 'Edit Name',
+                btnDelete: 'Delete',
+                modalEditTitle: 'Edit Content Name',
+                placeholderNewName: 'Enter new name...',
+                btnCancel: 'Cancel',
+                btnSave: 'Save Changes',
+                modalDeleteTitle: 'Delete Content',
+                deleteConfirmText: 'Are you sure you want to delete',
+                deleteUndoText: 'This cannot be undone.'
             },
             de: {
                 heroTitle: 'Lies, was du liebst.<br>Lerne eine Sprache natürlich.',
@@ -138,7 +181,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 faq4PronounceDesc: 'Höre das Wort laut vorlesen, indem du auf den generierten Play-Button klickst.',
                 navUpload: 'Upload',
                 navLibrary: 'Bibliothek',
-                techBadge: 'Unterstützt von Google AI Services'
+                techBadge: 'Unterstützt von Google AI Services',
+                uploadTitle: 'Inhalt hochladen',
+                labelContentName: 'Name des Inhalts',
+                placeholderContentName: 'Geben Sie einen Namen für Ihren Inhalt ein...',
+                errorContentName: 'Bitte geben Sie zuerst einen Namen für Ihren Inhalt an.',
+                labelContentLanguage: 'Sprache des Inhalts',
+                tabDocument: 'Dokument',
+                tabPlainText: 'Klartext',
+                dropzoneText: 'Klicken Sie zum Hochladen oder Drag & Drop',
+                fileHint: 'PDF, TXT Dateien',
+                btnUploadDocument: 'Dokument hochladen',
+                placeholderPlainText: 'Geben oder fügen Sie Ihren Klartext hier ein...',
+                errorPlainText: 'Bitte geben Sie vor dem Hochladen Text ein.',
+                btnUploadText: 'Text hochladen',
+                toastUploadingDoc: 'Dokument wird hochgeladen...',
+                toastUploadingText: 'Text wird hochgeladen...',
+                errorOnlyPdfTxt: 'Nur PDF- und TXT-Dateien sind erlaubt.',
+                errorUploadFail: 'Hochladen des Dokuments fehlgeschlagen.',
+                errorUploadTextFail: 'Hochladen des Textes fehlgeschlagen.',
+                errorServer: 'Serverfehler.',
+                libraryTitle: 'Ihre Bibliothek',
+                itemCount0: '0 Elemente',
+                itemCount1: '1 Element',
+                itemCountMany: 'Elemente',
+                placeholderSearch: 'Suchen Sie in Ihrer Bibliothek...',
+                emptyStateText: 'Noch keine Dokumente hochgeladen. Laden Sie Ihr erstes Dokument hoch, um zu beginnen.',
+                thName: 'Name',
+                thType: 'Typ',
+                thDate: 'Datum',
+                thSize: 'Größe',
+                thStatus: 'Status',
+                statusReady: 'Bereit',
+                statusProcessing: 'Wird verarbeitet',
+                btnEditName: 'Name bearbeiten',
+                btnDelete: 'Löschen',
+                modalEditTitle: 'Name des Inhalts bearbeiten',
+                placeholderNewName: 'Neuen Namen eingeben...',
+                btnCancel: 'Abbrechen',
+                btnSave: 'Änderungen speichern',
+                modalDeleteTitle: 'Inhalt löschen',
+                deleteConfirmText: 'Sind Sie sicher, dass Sie löschen möchten',
+                deleteUndoText: 'Dies kann nicht rückgängig gemacht werden.'
             },
             es: {
                 heroTitle: 'Lee lo que amas.<br>Aprende un idioma de forma natural.',
@@ -172,7 +256,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 faq4PronounceDesc: 'Escucha la palabra leída en voz alta haciendo clic en el botón de reproducción generado.',
                 navUpload: 'Subir',
                 navLibrary: 'Biblioteca',
-                techBadge: 'Impulsado por Google AI Services'
+                techBadge: 'Impulsado por Google AI Services',
+                uploadTitle: 'Subir contenido',
+                labelContentName: 'Nombre del contenido',
+                placeholderContentName: 'Introduce un nombre para tu contenido...',
+                errorContentName: 'Por favor, proporciona un nombre para tu contenido primero.',
+                labelContentLanguage: 'Idioma del contenido',
+                tabDocument: 'Documento',
+                tabPlainText: 'Texto sin formato',
+                dropzoneText: 'Haz clic para subir o arrastra y suelta',
+                fileHint: 'Archivos PDF, TXT',
+                btnUploadDocument: 'Subir documento',
+                placeholderPlainText: 'Escribe o pega tu texto aquí...',
+                errorPlainText: 'Por favor, introduce algún texto antes de subirlo.',
+                btnUploadText: 'Subir texto',
+                toastUploadingDoc: 'Subiendo documento...',
+                toastUploadingText: 'Subiendo texto...',
+                errorOnlyPdfTxt: 'Solo se permiten archivos PDF y TXT.',
+                errorUploadFail: 'Error al subir el documento.',
+                errorUploadTextFail: 'Error al subir el texto.',
+                errorServer: 'Error del servidor.',
+                libraryTitle: 'Tu Biblioteca',
+                itemCount0: '0 elementos',
+                itemCount1: '1 elemento',
+                itemCountMany: 'elementos',
+                placeholderSearch: 'Buscar en tu biblioteca...',
+                emptyStateText: 'Aún no se han subido documentos. Sube tu primer documento para empezar.',
+                thName: 'Nombre',
+                thType: 'Tipo',
+                thDate: 'Fecha',
+                thSize: 'Tamaño',
+                thStatus: 'Estado',
+                statusReady: 'Listo',
+                statusProcessing: 'Procesando',
+                btnEditName: 'Editar nombre',
+                btnDelete: 'Eliminar',
+                modalEditTitle: 'Editar nombre del contenido',
+                placeholderNewName: 'Introduce un nuevo nombre...',
+                btnCancel: 'Cancelar',
+                btnSave: 'Guardar cambios',
+                modalDeleteTitle: 'Eliminar contenido',
+                deleteConfirmText: '¿Estás seguro de que quieres eliminar',
+                deleteUndoText: 'Esta acción no se puede deshacer.'
             }
         };
 
@@ -270,6 +395,102 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (techBadge) {
             techBadge.innerHTML = `<i data-lucide="sparkles"></i> ${t.techBadge}`;
         }
+
+        // Upload Page
+        const uploadTitle = document.querySelector('.card-title.upload-title');
+        if (uploadTitle) uploadTitle.textContent = t.uploadTitle;
+
+        const contentNameLabel = document.querySelector('label[for="content-name"]');
+        if (contentNameLabel) contentNameLabel.textContent = t.labelContentName;
+
+        const contentNameInput = document.getElementById('content-name');
+        if (contentNameInput) contentNameInput.placeholder = t.placeholderContentName;
+
+        const nameError = document.getElementById('name-error');
+        if (nameError) nameError.textContent = t.errorContentName;
+
+        const contentLanguageLabel = document.querySelector('label[for="select-language"]');
+        if (contentLanguageLabel) contentLanguageLabel.textContent = t.labelContentLanguage;
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            if (tab.dataset.tab === 'document') {
+                tab.innerHTML = `<i data-lucide="file-text"></i> ${t.tabDocument}`;
+            } else if (tab.dataset.tab === 'plaintext') {
+                tab.innerHTML = `<i data-lucide="align-left"></i> ${t.tabPlainText}`;
+            }
+        });
+
+        const dropzoneP = document.querySelector('.dropzone p');
+        if (dropzoneP) dropzoneP.textContent = t.dropzoneText;
+
+        const fileHint = document.querySelector('.file-hint');
+        if (fileHint) fileHint.textContent = t.fileHint;
+
+        const uploadDocBtn = document.getElementById('upload-document-btn');
+        if (uploadDocBtn) {
+            uploadDocBtn.innerHTML = `<i data-lucide="upload-cloud"></i> ${t.btnUploadDocument}`;
+        }
+
+        const textInput = document.getElementById('text-input');
+        if (textInput) textInput.placeholder = t.placeholderPlainText;
+
+        const textError = document.getElementById('text-error');
+        if (textError) textError.textContent = t.errorPlainText;
+
+        const uploadTextBtn = document.getElementById('upload-text-btn');
+        if (uploadTextBtn) {
+            uploadTextBtn.innerHTML = `<i data-lucide="upload-cloud"></i> ${t.btnUploadText}`;
+        }
+
+        // Library Page
+        const libraryTitle = document.querySelector('.card-title.library-title');
+        if (libraryTitle) libraryTitle.textContent = t.libraryTitle;
+
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.placeholder = t.placeholderSearch;
+
+        const emptyStateText = document.querySelector('.empty-state p');
+        if (emptyStateText) emptyStateText.textContent = t.emptyStateText;
+
+        const ths = document.querySelectorAll('#library-table th');
+        if (ths.length >= 5) {
+            ths[0].textContent = t.thName;
+            ths[1].textContent = t.thType;
+            ths[2].textContent = t.thDate;
+            ths[3].textContent = t.thSize;
+            ths[4].textContent = t.thStatus;
+        }
+
+        const modalEditTitle = document.querySelector('#edit-modal .modal-title');
+        if (modalEditTitle) {
+            modalEditTitle.innerHTML = `<i data-lucide="pencil" class="modal-icon"></i> ${t.modalEditTitle}`;
+        }
+
+        const editNameInputForLibrary = document.getElementById('edit-name-input');
+        if (editNameInputForLibrary) editNameInputForLibrary.placeholder = t.placeholderNewName;
+
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        if (cancelEditBtn) cancelEditBtn.textContent = t.btnCancel;
+
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        if (saveEditBtn) saveEditBtn.textContent = t.btnSave;
+
+        const modalDeleteTitle = document.querySelector('#delete-modal .modal-title');
+        if (modalDeleteTitle) {
+            modalDeleteTitle.innerHTML = `<i data-lucide="alert-triangle" class="modal-icon"></i> ${t.modalDeleteTitle}`;
+        }
+
+        const deleteModalP = document.querySelector('#delete-modal p');
+        if (deleteModalP) {
+            deleteModalP.innerHTML = `${t.deleteConfirmText} "<strong id="delete-item-name"></strong>"? ${t.deleteUndoText}`;
+        }
+
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        if (cancelDeleteBtn) cancelDeleteBtn.textContent = t.btnCancel;
+
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        if (confirmDeleteBtn) confirmDeleteBtn.textContent = t.btnDelete;
 
         // Re-run lucide to restore icons in modified elements
         lucide.createIcons();

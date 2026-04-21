@@ -38,6 +38,37 @@ tabs.forEach(tab => {
     });
 });
 
+function getTranslation(key) {
+    const lang = localStorage.getItem('language') || 'en';
+    const translations = {
+        en: {
+            toastUploadingDoc: 'Uploading document...',
+            toastUploadingText: 'Uploading text...',
+            errorOnlyPdfTxt: 'Only PDF and TXT files are allowed.',
+            errorUploadFail: 'Failed to upload document.',
+            errorUploadTextFail: 'Failed to upload text.',
+            errorServer: 'Server error.'
+        },
+        de: {
+            toastUploadingDoc: 'Dokument wird hochgeladen...',
+            toastUploadingText: 'Text wird hochgeladen...',
+            errorOnlyPdfTxt: 'Nur PDF- und TXT-Dateien sind erlaubt.',
+            errorUploadFail: 'Hochladen des Dokuments fehlgeschlagen.',
+            errorUploadTextFail: 'Hochladen des Textes fehlgeschlagen.',
+            errorServer: 'Serverfehler.'
+        },
+        es: {
+            toastUploadingDoc: 'Subiendo documento...',
+            toastUploadingText: 'Subiendo texto...',
+            errorOnlyPdfTxt: 'Solo se permiten archivos PDF y TXT.',
+            errorUploadFail: 'Error al subir el documento.',
+            errorUploadTextFail: 'Error al subir el texto.',
+            errorServer: 'Error del servidor.'
+        }
+    };
+    return (translations[lang] || translations.en)[key];
+}
+
 // --- Validation & UI Helpers ---
 function validateContentName() {
     const name = contentNameInput.value.trim();
@@ -114,7 +145,7 @@ function handleFileSelection(file) {
         lucide.createIcons(); // Refresh 'X' icon
         updateUploadDocButtonState();
     } else {
-        showToast("Only PDF and TXT files are allowed.", "error", "alert-circle");
+        showToast(getTranslation('errorOnlyPdfTxt'), "error", "alert-circle");
         fileUploadInput.value = '';
     }
 }
@@ -165,7 +196,7 @@ uploadDocBtn.addEventListener('click', async () => {
     formData.append('file', selectedFile);
     formData.append('language', language);
 
-    showToast('Uploading document...', 'info', 'loader-2');
+    showToast(getTranslation('toastUploadingDoc'), 'info', 'loader-2');
     uploadDocBtn.disabled = true;
 
     try {
@@ -177,12 +208,12 @@ uploadDocBtn.addEventListener('click', async () => {
         if (response.ok) {
             window.location.href = 'library.html';
         } else {
-            showToast("Failed to upload document.", "error", "alert-circle");
+            showToast(getTranslation('errorUploadFail'), "error", "alert-circle");
             uploadDocBtn.disabled = false;
         }
     } catch (error) {
         console.error("Error uploading document:", error);
-        showToast("Server error.", "error", "alert-circle");
+        showToast(getTranslation('errorServer'), "error", "alert-circle");
         uploadDocBtn.disabled = false;
     }
 });
@@ -201,7 +232,7 @@ uploadTextBtn.addEventListener('click', async () => {
         return;
     }
 
-    showToast('Uploading text...', 'info', 'loader-2');
+    showToast(getTranslation('toastUploadingText'), 'info', 'loader-2');
     uploadTextBtn.disabled = true;
 
     try {
@@ -214,12 +245,12 @@ uploadTextBtn.addEventListener('click', async () => {
         if (response.ok) {
             window.location.href = 'library.html';
         } else {
-            showToast("Failed to upload text.", "error", "alert-circle");
+            showToast(getTranslation('errorUploadTextFail'), "error", "alert-circle");
             uploadTextBtn.disabled = false;
         }
     } catch (error) {
         console.error("Error uploading text:", error);
-        showToast("Server error.", "error", "alert-circle");
+        showToast(getTranslation('errorServer'), "error", "alert-circle");
         uploadTextBtn.disabled = false;
     }
 });

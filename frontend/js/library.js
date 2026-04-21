@@ -4,6 +4,40 @@ const emptyState = document.getElementById('empty-state');
 const libraryTable = document.getElementById('library-table');
 const itemCountText = document.getElementById('item-count');
 
+function getTranslation(key) {
+    const lang = localStorage.getItem('language') || 'en';
+    const translations = {
+        en: {
+            itemCount0: '0 items',
+            itemCount1: '1 item',
+            itemCountMany: 'items',
+            statusReady: 'Ready',
+            statusProcessing: 'Processing',
+            btnEditName: 'Edit Name',
+            btnDelete: 'Delete'
+        },
+        de: {
+            itemCount0: '0 Elemente',
+            itemCount1: '1 Element',
+            itemCountMany: 'Elemente',
+            statusReady: 'Bereit',
+            statusProcessing: 'Wird verarbeitet',
+            btnEditName: 'Name bearbeiten',
+            btnDelete: 'Löschen'
+        },
+        es: {
+            itemCount0: '0 elementos',
+            itemCount1: '1 elemento',
+            itemCountMany: 'elementos',
+            statusReady: 'Listo',
+            statusProcessing: 'Procesando',
+            btnEditName: 'Editar nombre',
+            btnDelete: 'Eliminar'
+        }
+    };
+    return (translations[lang] || translations.en)[key];
+}
+
 let allItems = [];
 let activeRowId = null;
 
@@ -44,13 +78,17 @@ function renderTable(data) {
     if (data.length === 0) {
         emptyState.classList.remove('hidden');
         libraryTable.classList.add('hidden');
-        itemCountText.textContent = "0 items";
+        itemCountText.textContent = getTranslation('itemCount0');
         return;
     }
 
     emptyState.classList.add('hidden');
     libraryTable.classList.remove('hidden');
-    itemCountText.textContent = data.length === 1 ? "1 item" : `${data.length} items`;
+    if (data.length === 1) {
+        itemCountText.textContent = getTranslation('itemCount1');
+    } else {
+        itemCountText.textContent = `${data.length} ${getTranslation('itemCountMany')}`;
+    }
 
     data.forEach(item => {
         const tr = document.createElement('tr');
@@ -84,14 +122,14 @@ function renderTable(data) {
         }
 
         const statusHtml = item.ocrProcessed
-            ? `<td class="status-ready"><i data-lucide="check-circle-2"></i> Ready</td>`
-            : `<td style="color: var(--muted-foreground)"><i data-lucide="loader-2" class="spin"></i> Processing</td>`;
+            ? `<td class="status-ready"><i data-lucide="check-circle-2"></i> ${getTranslation('statusReady')}</td>`
+            : `<td style="color: var(--muted-foreground)"><i data-lucide="loader-2" class="spin"></i> ${getTranslation('statusProcessing')}</td>`;
 
         // Only render action buttons if the item is fully processed
         const actionsHtml = item.ocrProcessed
             ? `<div class="action-buttons-wrapper">
-                   <button class="icon-btn edit-btn" title="Edit Name"><i data-lucide="pencil"></i></button>
-                   <button class="icon-btn delete-btn" title="Delete"><i data-lucide="trash-2"></i></button>
+                   <button class="icon-btn edit-btn" title="${getTranslation('btnEditName')}"><i data-lucide="pencil"></i></button>
+                   <button class="icon-btn delete-btn" title="${getTranslation('btnDelete')}"><i data-lucide="trash-2"></i></button>
                </div>`
             : ``;
 
@@ -124,7 +162,13 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 const editModal = document.getElementById('edit-modal');
 const deleteModal = document.getElementById('delete-modal');
 const editNameInput = document.getElementById('edit-name-input');
-const deleteItemNameText = document.getElementById('delete-item-name');
+
+// Listen for language change to re-render the table immediately
+window.addEventListener('languageChanged', () => {
+    if (allItems.length > 0) {
+        renderTable(allItems);
+    }
+});
 
 libraryBody.addEventListener('click', (e) => {
     const row = e.target.closest('tr');
@@ -147,7 +191,11 @@ libraryBody.addEventListener('click', (e) => {
     // Handle Delete Button Click
     if (e.target.closest('.delete-btn')) {
         const currentName = row.querySelector('.item-name-text').textContent;
-        deleteItemNameText.textContent = currentName;
+        // Re-query the element because it might have been replaced by common.js applyTranslations
+        const deleteItemNameText = document.getElementById('delete-item-name');
+        if (deleteItemNameText) {
+            deleteItemNameText.textContent = currentName;
+        }
         deleteModal.classList.remove('hidden');
         return;
     }
