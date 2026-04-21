@@ -1,0 +1,63 @@
+@startuml
+!theme plain
+
+title Component Diagram – Simple Container Architecture
+
+skinparam componentStyle uml2
+skinparam shadowing false
+
+' ===== Stronger Colors =====
+skinparam component {
+    BackgroundColor<<frontend>> #BBDEFB
+    BackgroundColor<<backend>> #C8E6C9
+    BackgroundColor<<external>> #E1BEE7
+    BackgroundColor<<nginx>> #90CAF9
+    BorderColor #444444
+}
+
+skinparam database {
+    BackgroundColor<<storage>> #FFE0B2
+    BorderColor #444444
+}
+
+skinparam node {
+    BackgroundColor #F5F5F5
+    BorderColor #AAAAAA
+}
+
+' Add this line to force plain text globally for components if you prefer
+skinparam component {
+    FontStyle plain
+}
+
+' ========================
+' External Services
+' ========================
+component "Google AI Services\nGemini APIs\n(HTTPS)" as Gemini <<external>>
+
+' ========================
+' Docker Environment
+' ========================
+node "Docker Environment" {
+
+    component "Frontend\n<font:sans-serif>Port: 8081</font>" as Frontend <<frontend>> {
+        component "NGINX" as Nginx <<nginx>>
+    }
+
+    component "Backend\nSpring Boot\nPort: 8080" as Backend <<backend>>
+
+    database "PostgreSQL\nPort: 5432" as Postgres <<storage>>
+
+    database "MinIO\nPorts: 9000 (API), 9001 (Console)" as Minio <<storage>>
+}
+
+' ========================
+' Connections
+' ========================
+Frontend --> Backend : HTTP / REST
+
+Backend --> Postgres : JDBC (JPA)
+Backend --> Minio : S3 API
+Backend --> Gemini : HTTPS
+
+@enduml
