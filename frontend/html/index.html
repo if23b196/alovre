@@ -8,19 +8,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<nav class="navbar">
-    <a href="index.html" class="logo">
-        <i data-lucide="book-open" class="icon-brand"></i>
-        <span>alovre</span>
-    </a>
-    <div class="nav-actions">
-        <a href="upload.html" class="nav-btn"><i data-lucide="upload"></i> Upload</a>
-        <a href="library.html" class="nav-btn"><i data-lucide="library"></i> Library</a>
-        <button id="theme-toggle" aria-label="Toggle Dark Mode">
-            <i data-lucide="moon" id="theme-icon"></i>
-        </button>
-    </div>
-</nav>
+<div id="navbar-container"></div>
 
 <main class="container">
     <header class="hero-section">
@@ -81,12 +69,11 @@
                     <i data-lucide="chevron-down" class="faq-icon"></i>
                 </summary>
                 <div class="faq-content">
-                    <p>Head to the Upload page. Provide a mandatory name, select the source language, and choose your format:
+                    <p>Head to the Upload page. Provide a mandatory name, select the source language, and choose your format:</p>
                     <ul>
                         <li><strong>Document:</strong> Drag and drop or click to upload PDF/TXT files.</li>
                         <li><strong>Plain Text:</strong> Paste raw text directly into the field.</li>
                     </ul>
-                    </p>
                 </div>
             </details>
 
@@ -106,13 +93,12 @@
                     <i data-lucide="chevron-down" class="faq-icon"></i>
                 </summary>
                 <div class="faq-content">
-                    <p>Inside the Reader Mode, simply <strong>click any word</strong> in the text to select it. Then use the tools on the right:
-                    <ul>
-                        <li><strong>Translate:</strong> Get contextual translations into a language of choice and explanation in the contents language.</li>
-                        <li><strong>Image:</strong> Generate a visual association for the word.</li>
-                        <li><strong>Pronounce:</strong> Hear the word read aloud by clicking the generated Play button.</li>
-                    </ul>
-                    </p>
+                    <p>Inside the Reader Mode, simply <strong>click any word</strong> in the text to select it. Then use the tools on the right:</p>
+                        <ul>
+                            <li><strong>Translate:</strong> Get contextual translations into a language of choice and explanation in the contents language.</li>
+                            <li><strong>Image:</strong> Generate a visual association for the word.</li>
+                            <li><strong>Pronounce:</strong> Hear the word read aloud by clicking the generated Play button.</li>
+                        </ul>
                 </div>
             </details>
         </div>

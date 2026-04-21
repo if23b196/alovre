@@ -493,6 +493,23 @@ body.reader-mode .navbar {
     height: 42px; /* Fixed height to match the button next to it */
 }
 
+.nav-actions .language-select-wrapper {
+    height: 38px;
+}
+
+.nav-actions .language-select {
+    padding: 0 1rem 0 2.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 1rem;
+}
+
+.nav-actions .select-icon {
+    left: 0.75rem;
+    width: 18px !important;
+    height: 18px !important;
+}
+
 .language-select {
     appearance: none;
     background: transparent;
