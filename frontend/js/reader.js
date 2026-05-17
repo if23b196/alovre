@@ -234,20 +234,19 @@ function handleGenerate(toolKey, generatorFunction) {
     }, 800);
 }
 
-// 4. Renderers (Updated to sync button text with history)
+// 4. Renderers (Updated to sync button text and display word badges dynamically)
 function renderToolState(toolKey) {
     const state = toolState[toolKey];
     const resultArea = document.getElementById(`${toolKey}-result`);
     const pagination = document.getElementById(`${toolKey}-pagination`);
 
-    // Elements for the image word label
-    const imageWordDisplay = document.getElementById('image-word-display');
-    const imageWordText = document.getElementById('image-word-text');
+    // Dynamic badge element matching based on toolKey (translate or image)
+    const wordDisplay = document.getElementById(`${toolKey}-word-display`);
+    const wordText = document.getElementById(`${toolKey}-word-text`);
 
     if (state.history.length === 0) {
         resultArea.classList.add('empty');
 
-        // FIX: Use correct grammar for empty states instead of raw toolKey strings
         const emptyMessages = {
             'translate': getTranslation('translateEmpty'),
             'image': getTranslation('imageEmpty'),
@@ -257,9 +256,9 @@ function renderToolState(toolKey) {
 
         pagination.classList.add('hidden');
 
-        // Hide badge if there are no images
-        if (toolKey === 'image' && imageWordDisplay) {
-            imageWordDisplay.classList.add('hidden');
+        // Hide badge dynamically if history is cleared/empty
+        if (wordDisplay) {
+            wordDisplay.classList.add('hidden');
         }
         return;
     }
@@ -268,16 +267,16 @@ function renderToolState(toolKey) {
     resultArea.classList.remove('empty');
     pagination.classList.remove('hidden');
 
+    // Update and show the badge layout automatically if it exists for the feature
+    if (wordDisplay && wordText) {
+        wordText.textContent = currentEntry.word;
+        wordDisplay.classList.remove('hidden');
+    }
+
     if (toolKey === 'translate') {
         resultArea.innerHTML = `<p class="text-left-align">${currentEntry.result}</p>`;
     } else if (toolKey === 'image') {
         resultArea.innerHTML = `<img src="${currentEntry.result}" class="generated-image">`;
-
-        // Update and show the elegant badge
-        if (imageWordDisplay && imageWordText) {
-            imageWordText.textContent = currentEntry.word;
-            imageWordDisplay.classList.remove('hidden');
-        }
     } else if (toolKey === 'audio') {
         resultArea.innerHTML = `
             <button class="generated-audio-btn" data-audio="${currentEntry.result}">

@@ -1,3 +1,5 @@
+const htmlEl = document.documentElement;
+
 /* global lucide */
 // Shared logic across all pages
 document.addEventListener('DOMContentLoaded', async () => {
@@ -62,8 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error loading navbar:', error);
         }
     }
-
-    const htmlEl = document.documentElement;
 
     // Load saved theme from localStorage (do this immediately to avoid flash)
     if (localStorage.getItem('theme') === 'dark') {

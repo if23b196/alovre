@@ -50,12 +50,20 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="pagination hidden" id="translate-pagination">
                     <button class="page-btn prev-btn"><i data-lucide="chevron-left"></i></button>
                     <span class="page-counter">1 / 1</span>
                     <button class="page-btn next-btn"><i data-lucide="chevron-right"></i></button>
                 </div>
             </div>
+
+            <!-- NEW: Translate Word Badge -->
+            <div id="translate-word-display" class="word-badge hidden">
+                <i data-lucide="tag" class="badge-icon"></i>
+                <span id="translate-word-text"></span>
+            </div>
+
             <div class="tool-content">
                 <div id="translate-result" class="result-area empty">No translations yet</div>
             </div>

@@ -258,7 +258,6 @@ a.btn-secondary { background-color: var(--secondary); color: var(--secondary-for
 a.btn-secondary:hover { background-color: var(--muted); }
 
 /* --- Navbar Buttons Fix --- */
-/* --- Navbar Buttons Fix --- */
 .nav-btn {
     background-color: transparent; /* Clean transparent look */
     color: var(--primary);         /* Professional orange text */
@@ -493,21 +492,61 @@ body.reader-mode .navbar {
     height: 42px; /* Fixed height to match the button next to it */
 }
 
+/* --- Navbar Language Dropdown Matching Fix --- */
+
+/* 1. Style the wrapper to look and behave EXACTLY like .nav-btn */
 .nav-actions .language-select-wrapper {
-    height: 38px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 1rem;            /* Match .nav-btn radius */
+    height: 42px;                    /* Exact pixel height match to .nav-btn's padding + line-height */
+    box-sizing: border-box;
+    transition: all 0.25s ease;      /* Match .nav-btn transition speed */
 }
 
-.nav-actions .language-select {
-    padding: 0 1rem 0 2.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 1rem;
-}
-
+/* 2. Style the dropdown icon inside the wrapper */
 .nav-actions .select-icon {
-    left: 0.75rem;
-    width: 18px !important;
-    height: 18px !important;
+    position: absolute;
+    left: 0.85rem;
+    pointer-events: none;            /* Allows clicking "through" the icon to open dropdown */
+    width: 22px !important;          /* Match .nav-btn icon size */
+    height: 22px !important;
+    color: inherit;                  /* Dynamic color changes on hover automatically */
+    transition: all 0.25s ease;
+}
+
+/* 3. Style the underlying select option element */
+.nav-actions .language-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    color: inherit;                  /* Inherits color rules from the wrapper */
+    border: none;                    /* Remove native border since wrapper handles it */
+    font-size: 0.95rem;              /* Match .nav-btn size */
+    font-weight: 600;                /* Match .nav-btn weight */
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    padding: 0 1.5rem 0 2.5rem;      /* Left padding leaves room for icon, right padding leaves room for text balance */
+}
+
+/* 4. Match the complete .nav-btn hover experience (animations, backgrounds, and shadows) */
+.nav-actions .language-select-wrapper:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184, 92, 47, 0.15);
+}
+
+/* Active drop layout click adjustments */
+.nav-actions .language-select-wrapper:active {
+    transform: translateY(0);
 }
 
 .language-select {
@@ -769,10 +808,11 @@ button:disabled {
     white-space: nowrap;
     transition: all 0.2s ease;
     height: 42px; /* Explicit height to align perfectly with buttons */
+    width: fit-content;
 }
 
-.word-badge #image-word-text {
-    /* Subtle emphasis on the word itself */
+.word-badge span {
+    /* Styles the text inside ANY word badge (image or translate) */
     color: var(--primary);
     font-weight: 600;
 }
@@ -788,6 +828,14 @@ button:disabled {
 .word-badge:hover {
     border-color: var(--primary);
     background-color: rgba(184, 92, 47, 0.05);
+}
+
+/* Container to handle spacing for badges placed below header rows */
+.tool-badge-row {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 0.75rem;
+    padding-bottom: 0.25rem;
 }
 
 /* --- FAQ Section --- */
