@@ -1,6 +1,6 @@
-# alovre
+# Alovre
 
-Your second-language reading app with helpful AI features. **alovre** helps users read content in a foreign language by providing instant translations, context-aware image generation for vocabulary, and text-to-speech (TTS) pronunciation using Google Gemini AI.
+Your second-language reading app with helpful AI features. **Alovre** helps users read content in a foreign language by providing instant translations, context-aware image generation for vocabulary, and text-to-speech (TTS) pronunciation using Google Gemini AI.
 
 ## Features
 
