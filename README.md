@@ -18,12 +18,12 @@ Your second-language reading app with helpful AI features. **Alovre** helps user
 - **Framework**: Spring Boot 3.5.12
 - **Database**: PostgreSQL 15
 - **Object Storage**: MinIO (for storing uploaded documents and generated AI assets)
-- **AI Integration**: Google Gemini SDK (`google-genai`)
+- **AI Integration**: Google Gemini SDK
 - **OCR**: Tesseract OCR
 - **Build Tool**: Maven
 
 ### Frontend
-- **Languages**: HTML5, CSS3, Vanilla JavaScript
+- **Languages**: HTML5, CSS3, vanilla JavaScript
 - **Web Server**: Nginx
 
 ### Infrastructure
@@ -43,12 +43,12 @@ Everything can be run directly from the project root directory.
 
 ### Using Docker Compose
 
-1. Create a `.env` file in the root directory and add your Gemini API key:
+1. Create a `.env` file in the root directory and add your Gemini API key from Google AI Studio:
    ```env
    GEMINI_API_KEY=your_api_key_here
    ```
 
-2. Build and start all services (run this from the root directory):
+2. Build and start all services (run this in a terminal from the root directory):
    ```bash
    docker compose up --build
    ```
