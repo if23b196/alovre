@@ -33,6 +33,42 @@ function getTranslation(key) {
             statusProcessing: 'Procesando',
             btnEditName: 'Editar nombre',
             btnDelete: 'Eliminar'
+        },
+        fr: {
+            itemCount0: '0 élément',
+            itemCount1: '1 élément',
+            itemCountMany: 'éléments',
+            statusReady: 'Prêt',
+            statusProcessing: 'En traitement',
+            btnEditName: 'Modifier le nom',
+            btnDelete: 'Supprimer'
+        },
+        it: {
+            itemCount0: '0 elementi',
+            itemCount1: '1 elemento',
+            itemCountMany: 'elementi',
+            statusReady: 'Pronto',
+            statusProcessing: 'Elaborazione',
+            btnEditName: 'Modifica nome',
+            btnDelete: 'Elimina'
+        },
+        pt: {
+            itemCount0: '0 itens',
+            itemCount1: '1 item',
+            itemCountMany: 'itens',
+            statusReady: 'Pronto',
+            statusProcessing: 'Processando',
+            btnEditName: 'Editar nome',
+            btnDelete: 'Excluir'
+        },
+        tr: {
+            itemCount0: '0 öğe',
+            itemCount1: '1 öğe',
+            itemCountMany: 'öğe',
+            statusReady: 'Hazır',
+            statusProcessing: 'İşleniyor',
+            btnEditName: 'Adı düzenle',
+            btnDelete: 'Sil'
         }
     };
     return (translations[lang] || translations.en)[key];

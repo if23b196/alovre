@@ -64,9 +64,80 @@ function getTranslation(key) {
             toastTranslationFailed: 'Error en la traducción',
             toastImageFailed: 'Error al generar la imagen',
             toastAudioFailed: 'Error al generar el audio',
-            toastTranslationReady: '¡Traducción lista!',
             toastSelectWordFirst: 'Por favor, selecciona primero una palabra.',
             toastNoWordSelected: 'Ninguna palabra seleccionada'
+        },
+        fr: {
+            readerSelectedLabel: 'Sélectionné',
+            translateEmpty: 'Aucune traduction pour le moment',
+            imageEmpty: 'Aucune image pour le moment',
+            audioEmpty: 'Aucun audio pour le moment',
+            btnPlay: 'Lecture',
+            toastTranslating: 'Traduction vers',
+            toastGeneratingImage: 'Génération de l’image...',
+            toastGeneratingAudio: 'Génération de l’audio...',
+            toastTranslationReady: 'Traduction prête !',
+            toastImageReady: 'Image prête !',
+            toastAudioReady: 'Audio prêt !',
+            toastTranslationFailed: 'Échec de la traduction',
+            toastImageFailed: 'Échec de la génération de l’image',
+            toastAudioFailed: 'Échec de la génération de l’audio',
+            toastSelectWordFirst: 'Veuillez d’abord sélectionner un mot.',
+            toastNoWordSelected: 'Aucun mot sélectionné'
+        },
+        it: {
+            readerSelectedLabel: 'Selezionato',
+            translateEmpty: 'Nessuna traduzione ancora',
+            imageEmpty: 'Nessuna immagine ancora',
+            audioEmpty: 'Nessun audio ancora',
+            btnPlay: 'Riproduci',
+            toastTranslating: 'Traduzione in corso verso',
+            toastGeneratingImage: 'Generazione immagine...',
+            toastGeneratingAudio: 'Generazione audio...',
+            toastTranslationReady: 'Traduzione pronta!',
+            toastImageReady: 'Immagine pronta!',
+            toastAudioReady: 'Audio pronto!',
+            toastTranslationFailed: 'Traduzione non riuscita',
+            toastImageFailed: 'Generazione immagine non riuscita',
+            toastAudioFailed: 'Generazione audio non riuscita',
+            toastSelectWordFirst: 'Seleziona prima una parola.',
+            toastNoWordSelected: 'Nessuna parola selezionata'
+        },
+        pt: {
+            readerSelectedLabel: 'Selecionado',
+            translateEmpty: 'Nenhuma tradução ainda',
+            imageEmpty: 'Nenhuma imagem ainda',
+            audioEmpty: 'Nenhum áudio ainda',
+            btnPlay: 'Reproduzir',
+            toastTranslating: 'Traduzindo para',
+            toastGeneratingImage: 'Gerando imagem...',
+            toastGeneratingAudio: 'Gerando áudio...',
+            toastTranslationReady: 'Tradução pronta!',
+            toastImageReady: 'Imagem pronta!',
+            toastAudioReady: 'Áudio pronto!',
+            toastTranslationFailed: 'Falha na tradução',
+            toastImageFailed: 'Falha ao gerar imagem',
+            toastAudioFailed: 'Falha ao gerar áudio',
+            toastSelectWordFirst: 'Por favor, selecione uma palavra primeiro.',
+            toastNoWordSelected: 'Nenhuma palavra selecionada'
+        },
+        tr: {
+            readerSelectedLabel: 'Seçilen',
+            translateEmpty: 'Henüz çeviri yok',
+            imageEmpty: 'Henüz görsel yok',
+            audioEmpty: 'Henüz ses yok',
+            btnPlay: 'Oynat',
+            toastTranslating: 'Şu dile çevriliyor',
+            toastGeneratingImage: 'Görsel oluşturuluyor...',
+            toastGeneratingAudio: 'Ses oluşturuluyor...',
+            toastTranslationReady: 'Çeviri hazır!',
+            toastImageReady: 'Görsel hazır!',
+            toastAudioReady: 'Ses hazır!',
+            toastTranslationFailed: 'Çeviri başarısız oldu',
+            toastImageFailed: 'Görsel oluşturma başarısız oldu',
+            toastAudioFailed: 'Ses oluşturma başarısız oldu',
+            toastSelectWordFirst: 'Lütfen önce bir kelime seçin.',
+            toastNoWordSelected: 'Kelime seçilmedi'
         }
     };
     const langData = translations[lang] || translations.en;
@@ -116,10 +187,14 @@ function renderText(text) {
     }
 
     // Split into tokens (words vs non‑words)
-    const tokens = text.split(/([\w'-]+)/g);
+    // Using \p{L} for Unicode letters and \p{M} for marks to support German umlauts and other characters
+    const wordRegex = /([\p{L}\p{M}0-9'-]+)/gu;
+    const tokens = text.split(wordRegex);
 
     textContainer.innerHTML = tokens.map(token => {
-        if (/([\w'-]+)/g.test(token)) {
+        // Reset lastIndex for the regex since it has the global flag
+        wordRegex.lastIndex = 0;
+        if (wordRegex.test(token)) {
             return `<span class="word" data-word="${token.toLowerCase()}">${token}</span>`;
         }
         return token;
@@ -194,10 +269,11 @@ textContainer.addEventListener('click', (e) => {
             el.classList.remove('selected', 'instance-highlight');
         });
 
-        // Highlight ALL instances of this word
-        document.querySelectorAll(`.word[data-word="${clickedWord}"]`).forEach(el => {
-            el.classList.add('instance-highlight');
-        });
+    // Highlight ALL instances of this word
+    // We use CSS.escape to handle any special characters in the data-word attribute
+    document.querySelectorAll(`.word[data-word="${CSS.escape(clickedWord)}"]`).forEach(el => {
+        el.classList.add('instance-highlight');
+    });
 
         // Specifically mark the CLICKED one as the primary selected
         e.target.classList.add('selected');
