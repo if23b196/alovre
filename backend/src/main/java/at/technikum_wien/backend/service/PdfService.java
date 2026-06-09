@@ -20,6 +20,7 @@ public class PdfService {
     public String extractText(InputStream pdfInputStream) {
         try (PDDocument document = PDDocument.load(pdfInputStream)) {
             PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setSortByPosition(true);
             return stripper.getText(document).trim();
         } catch (Exception e) {
             log.error("Failed to extract text from PDF", e);

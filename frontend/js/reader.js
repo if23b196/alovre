@@ -189,15 +189,26 @@ function renderText(text) {
     // Split into tokens (words vs non‑words)
     // Using \p{L} for Unicode letters and \p{M} for marks to support German umlauts and other characters
     const wordRegex = /([\p{L}\p{M}0-9'-]+)/gu;
-    const tokens = text.split(wordRegex);
 
-    textContainer.innerHTML = tokens.map(token => {
-        // Reset lastIndex for the regex since it has the global flag
-        wordRegex.lastIndex = 0;
-        if (wordRegex.test(token)) {
-            return `<span class="word" data-word="${token.toLowerCase()}">${token}</span>`;
-        }
-        return token;
+    // Split text into paragraphs first
+    const paragraphs = text.split(/\r?\n\s*\r?\n/);
+
+    textContainer.innerHTML = paragraphs.map(para => {
+        const trimmedPara = para.trim();
+        if (trimmedPara === "") return "";
+        
+        const tokens = trimmedPara.split(wordRegex);
+        const paraHtml = tokens.map(token => {
+            // Reset lastIndex for the regex since it has the global flag
+            wordRegex.lastIndex = 0;
+            if (wordRegex.test(token)) {
+                return `<span class="word" data-word="${token.toLowerCase()}">${token}</span>`;
+            }
+            // Preserve internal newlines within paragraphs by converting them to spaces
+            return token.replace(/\r?\n/g, ' ');
+        }).join('');
+        
+        return `<p>${paraHtml}</p>`;
     }).join('');
 }
 

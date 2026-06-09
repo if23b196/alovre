@@ -28,7 +28,7 @@ public class TesseractOcrEngine {
             // Run Tesseract
             String result = tesseract.doOCR(tempFile);
             tempFile.delete();
-            return result.trim();
+            return result;
         } catch (Exception e) {
             throw new RuntimeException("OCR failed", e);
         }
