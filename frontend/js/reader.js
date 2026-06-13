@@ -403,8 +403,8 @@ function getContextSentence(clickedElement) {
     const sentencesBefore = textBefore.match(/[^.!?]+[.!?]+/g) || [];
     const index = sentencesBefore.length;
 
-    // Get current + 6 previous sentences
-    const start = Math.max(0, index - 6);
+    // Get current + 14 previous sentences (15 sentences total)
+    const start = Math.max(0, index - 14);
     const contextSentences = sentences.slice(start, index + 1);
 
     return contextSentences.join(' ').trim();

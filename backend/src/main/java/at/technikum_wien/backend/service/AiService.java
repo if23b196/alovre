@@ -92,33 +92,41 @@ public class AiService {
         // Nano Banana 2 Prompt Building
         // -----------------------------
         String prompt = """
-                You are generating an educational image for a language learning app.
-                
-                Goal:
-                Create a clear, simple, and visually unambiguous image that represents the meaning of the word.
-                
-                Word:
-                "%s"
-                
-                Text language:
-                %s
-                
-                Context:
-                "%s"
-                
-                Instructions:
-                - Use the context to determine the correct meaning of the word.
-                - If the word has multiple meanings, choose ONLY the meaning that fits the context.
-                - The image must be easy to understand for learners (no abstract or symbolic visuals).
-                - Focus on ONE main subject.
-                - Avoid text inside the image.
-                - Avoid artistic or complex styles.
-                - Use a clean, realistic, or simple illustration style.
-                - Make the subject large and centered.
-                
-                Output:
-                Return ONLY the generated image.
-                """.formatted(
+            You are generating an educational image for a language learning app.
+            
+            Goal:
+            Create a clear, simple, and visually unambiguous illustration of the word "%s". 
+            The image must be strictly based on the final sentence of the provided context. If the word appears 
+            multiple times in the text, ignore previous instances and illustrate the word as it is used 
+            in that final sentence.
+            
+            Contextual Integration:
+            The image must depict the specific scene described in the final sentence. While the word 
+            "%s" is the focal subject of the illustration, you must incorporate the surrounding context 
+            (e.g., characters, setting, or actions) to create a coherent narrative scene.
+            
+            Word:
+            "%s"
+            
+            Text language:
+            %s
+            
+            Context:
+            "%s"
+            
+            Instructions:
+            - Style: Use a clean, colorful, cartoon-ish illustration style suitable for children.
+            - Focus: The target word must be the most prominent element, but it must be interacting 
+              with or placed within the context described.
+            - Clarity: Ensure the subject is easy to identify and the scene is not cluttered.
+            - Subject: Single, clear focal subject, centered.
+            - Prohibitions: ABSOLUTELY NO text AND NO labels, no photorealistic or 3D-rendered styles.
+            
+            Output:
+            Return ONLY the generated image.
+            """.formatted(
+                word,
+                word,
                 word,
                 content.getLanguage(),
                 context != null ? context : ""
