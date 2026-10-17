@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/alovre.iml" filepath="$PROJECT_DIR$/.idea/alovre.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frontend-angular/frontend-angular.iml" filepath="$PROJECT_DIR$/frontend-angular/frontend-angular.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-legacy/frontend-legacy.iml" filepath="$PROJECT_DIR$/frontend-legacy/frontend-legacy.iml" />
     </modules>
   </component>
