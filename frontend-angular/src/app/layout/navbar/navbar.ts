@@ -6,14 +6,13 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {LanguageSelector} from '../../shared/components/language-selector/language-selector';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, TranslocoModule, MatToolbarModule,
-    MatButtonModule, MatIconModule, MatSelectModule, MatFormFieldModule,],
+    MatButtonModule, MatIconModule, LanguageSelector],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

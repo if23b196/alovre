@@ -1,0 +1,95 @@
+:host {
+  display: inline-block;
+}
+
+.language-select-field {
+  width: 140px;
+  font-size: 0.9rem;
+  margin-bottom: -1.25rem;
+
+  ::ng-deep {
+    /* Main wrapper container matching button shape */
+    .mat-mdc-text-field-wrapper {
+      background-color: transparent !important;
+      border-radius: 1rem !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      height: 40px !important;
+      border: 1px solid var(--border);
+      transition: all 0.25s ease;
+
+      &:hover {
+        border-color: var(--primary) !important;
+        background-color: var(--secondary) !important;
+      }
+    }
+
+    .mat-mdc-form-field-flex {
+      height: 100% !important;
+      align-items: center !important;
+      padding-left: 10px !important;
+      padding-right: 8px !important;
+    }
+
+    /* Completely hide Material's built-in outline boxes to prevent double borders */
+    .mdc-notched-outline,
+    .mdc-notched__leading,
+    .mdc-notched__notch,
+    .mdc-notched__trailing,
+    .mat-mdc-notched-outline {
+      border: none !important;
+      display: none !important;
+    }
+
+    /* Center prefix icon and text vertically */
+    .mat-mdc-form-field-icon-prefix {
+      display: flex;
+      align-items: center;
+      padding-right: 6px !important;
+      margin-top: 0 !important;
+    }
+
+    .mat-mdc-select-trigger {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow,
+    .mat-icon {
+      color: var(--primary) !important;
+    }
+
+    .mat-icon {
+      font-size: 1.1rem !important;
+      width: 1.1rem !important;
+      height: 1.1rem !important;
+    }
+
+    .mat-mdc-select-value-text {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--primary) !important;
+    }
+  }
+}
+
+/* Global override for the popup dropdown panel so it's rounded and matches the theme */
+::ng-deep .mat-mdc-select-panel {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  margin-top: 6px !important;
+
+  .mat-mdc-option {
+    color: var(--foreground) !important;
+    font-family: var(--font-sans) !important;
+
+    &:hover, &.mdc-list-item--selected {
+      background-color: var(--secondary) !important;
+      color: var(--primary) !important;
+    }
+  }
+}

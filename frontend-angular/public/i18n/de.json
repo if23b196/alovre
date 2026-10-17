@@ -1,1 +1,6 @@
-{}
+{
+  "nav": {
+    "upload": "Hochladen",
+    "library": "Bibliothek"
+  }
+}
