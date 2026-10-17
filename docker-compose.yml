@@ -73,14 +73,14 @@ services:
       - minio
 
   # -------------------------------
-  # 4. Frontend (NGINX)
+  # 4. Frontend-Legacy (NGINX)
   # -------------------------------
-  frontend:
+  frontend-legacy:
     build:
-      context: ./frontend
+      context: ./frontend-legacy
       dockerfile: Dockerfile
 
-    container_name: frontend
+    container_name: frontend-legacy
 
     ports:
       - "8081:80"

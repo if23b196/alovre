@@ -8,7 +8,7 @@ skinparam shadowing false
 
 ' ===== Stronger Colors =====
 skinparam component {
-    BackgroundColor<<frontend>> #BBDEFB
+    BackgroundColor<<frontend-legacy>> #BBDEFB
     BackgroundColor<<backend>> #C8E6C9
     BackgroundColor<<external>> #E1BEE7
     BackgroundColor<<nginx>> #90CAF9
@@ -40,7 +40,7 @@ component "Google AI Services\nGemini APIs\n(HTTPS)" as Gemini <<external>>
 ' ========================
 node "Docker Environment" {
 
-    component "Frontend\n<font:sans-serif>Port: 8081</font>" as Frontend <<frontend>> {
+    component "Frontend-Legacy\n<font:sans-serif>Port: 8081</font>" as FrontendLegacy <<frontend-legacy>> {
         component "NGINX" as Nginx <<nginx>>
     }
 
@@ -54,7 +54,7 @@ node "Docker Environment" {
 ' ========================
 ' Connections
 ' ========================
-Frontend --> Backend : HTTP / REST
+FrontendLegacy --> Backend : HTTP / REST
 
 Backend --> Postgres : JDBC (JPA)
 Backend --> Minio : S3 API

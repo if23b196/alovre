@@ -22,7 +22,7 @@ Your second-language reading app with helpful AI features. **Alovre** helps user
 - **OCR**: Tesseract OCR
 - **Build Tool**: Maven
 
-### Frontend
+### Frontend-Legacy
 - **Languages**: HTML5, CSS3, vanilla JavaScript
 - **Web Server**: Nginx
 
@@ -54,7 +54,7 @@ Everything can be run directly from the project root directory.
    ```
 
 3. Access the application:
-   - **Frontend**: [http://localhost:8081](http://localhost:8081)
+   - **Frontend-Legacy**: [http://localhost:8081](http://localhost:8081)
    - **Backend API**: [http://localhost:8080](http://localhost:8080)
    - **MinIO Console**: [http://localhost:9001](http://localhost:9001) (User/Pass: `minioadmin`/`minioadmin`)
 
@@ -84,13 +84,13 @@ The following environment variables are used in `docker-compose.yml`:
 │   ├── src/main/resources/ # Configuration files (application.properties)
 │   ├── pom.xml             # Maven dependencies
 │   └── Dockerfile          # Backend container definition (installs Tesseract 5)
-├── frontend/               # Static frontend files
+├── frontend-legacy/        # Static frontend-legacy files
 │   ├── html/               # HTML pages (index, library, reader, upload)
 │   ├── js/                 # Vanilla JavaScript logic
 │   ├── css/                # Styling (style.css)
 │   ├── nginx.conf          # Nginx configuration (proxies /api to backend)
-│   └── Dockerfile          # Frontend container definition (Nginx)
-├── docker-compose.yml      # Multi-container orchestration (Postgres, MinIO, Backend, Frontend)
+│   └── Dockerfile          # Frontend-Legacy container definition (Nginx)
+├── docker-compose.yml      # Multi-container orchestration (Postgres, MinIO, Backend, Frontend-Legacy)
 └── .env                    # API keys (not in Git)
 ```
 
