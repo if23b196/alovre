@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" class="navbar">
+  <!-- Brand Logo -->
+  <a routerLink="/" class="logo">
+    <mat-icon class="icon-brand">menu_book</mat-icon>
+    <span>Alovre</span>
+  </a>
+
+  <!-- Navigation Actions -->
+  <div class="nav-actions">
+    <!-- Language Selector Dropdown -->
+    <mat-form-field appearance="outline" class="language-select-field">
+      <mat-icon matPrefix>language</mat-icon>
+      <mat-select [value]="currentLang()" (selectionChange)="onLanguageChange($event.value)">
+        @for (lang of languages; track lang.code) {
+          <mat-option [value]="lang.code">{{ lang.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Upload Page Link -->
+    <a mat-button routerLink="/upload" routerLinkActive="active-link">
+      <mat-icon>cloud_upload</mat-icon>
+      {{ 'nav.upload' | transloco }}
+    </a>
+
+    <!-- Library Page Link -->
+    <a mat-button routerLink="/library" routerLinkActive="active-link">
+      <mat-icon>local_library</mat-icon>
+      {{ 'nav.library' | transloco }}
+    </a>
+
+    <!-- Dark Mode Toggle Button -->
+    <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="'Toggle Dark Mode'">
+      <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

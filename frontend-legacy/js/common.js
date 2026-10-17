@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 deleteConfirmText: 'Are you sure you want to delete',
                 deleteUndoText: 'This cannot be undone.',
                 readerBackToLibrary: 'Back to Library',
-                readerSelectedPrompt: 'Select a word from the text on the left side to use AI tools!',
+                readerSelectedPrompt: 'Please select a word from the text on the left side to use AI tools!',
                 readerSelectedLabel: 'Selected',
                 btnTranslate: 'Translate & Explain',
                 btnImage: 'Image',

@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+/* --- Global Theme Variables --- */
+:root {
+  --font-size: 16px;
+
+  /* Deep warm background */
+  --background: #f3d7c1;
+  --foreground: #4b2e1f;
+
+  /* Cards & Surface */
+  --card: #f9e4d4;
+  --card-foreground: #4b2e1f;
+
+  /* Primary */
+  --primary: #b85c2f;
+  --primary-foreground: #fff8f2;
+
+  /* Secondary */
+  --secondary: #eac7a8;
+  --secondary-foreground: #4b2e1f;
+
+  /* Muted & Hovers */
+  --muted: #dcab85;
+  --muted-foreground: #6d4a36;
+  --row-hover: #dcab85;
+
+  /* Borders & Inputs */
+  --border: rgba(184, 92, 47, 0.25);
+  --input-background: #f7e1cd;
+
+  /* Destructive */
+  --destructive: #d94a38;
+  --destructive-foreground: #ffffff;
+
+  /* Geometry & Typography */
+  --radius: 1.75rem;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Dark Mode Theme Overrides */
+body.dark {
+  --background: #2b1c15;
+  --foreground: #f9e4d4;
+  --card: #3d281f;
+  --card-foreground: #f9e4d4;
+  --primary: #d67a4a;
+  --primary-foreground: #2b1c15;
+  --secondary: #573b2d;
+  --secondary-foreground: #f9e4d4;
+  --muted: #4a3124;
+  --muted-foreground: #b3927e;
+  --row-hover: #483023;
+  --border: rgba(214, 122, 74, 0.25);
+  --input-background: #2b1c15;
+}
+
+/* Base Body Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.5;
+  min-height: 100vh;
+}

@@ -1,0 +1,119 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+  min-height: 64px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  .icon-brand {
+    color: var(--primary);
+  }
+}
+
+/* Right-side action container */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Material Buttons styled to match legacy nav-btn */
+.nav-actions a[mat-button] {
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.4rem 1.25rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 0.4rem;
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  &:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184, 92, 47, 0.15);
+  }
+
+  &.active-link {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+}
+
+/* Language selector dropdown tweak */
+.language-select-field {
+  width: 140px;
+  font-size: 0.9rem;
+
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--input-background) !important;
+      border-radius: 1rem !important;
+      padding-top: 0;
+    }
+
+    .mat-mdc-form-field-flex {
+      align-items: center;
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow,
+    .mat-icon {
+      color: var(--foreground) !important;
+    }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--border) !important;
+    }
+  }
+}
+
+/* Dark mode toggle button */
+button[mat-icon-button] {
+  color: var(--primary);
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: var(--secondary);
+    transform: rotate(15deg);
+  }
+}
