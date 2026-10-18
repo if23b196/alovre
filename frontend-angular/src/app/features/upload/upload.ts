@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { form, FormField, required, minLength } from '@angular/forms/signals';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
 // Material Imports
@@ -20,7 +20,7 @@ import { Notification } from '../../core/services/notification';
   selector: 'app-upload',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
+    FormField, // <--- Required for Signal Forms binding
     TranslocoDirective,
     MatCardModule,
     MatFormFieldModule,
@@ -35,45 +35,40 @@ import { Notification } from '../../core/services/notification';
   styleUrl: './upload.scss',
 })
 export class Upload {
-  private fb = inject(FormBuilder);
   private contentApi = inject(ContentApi);
   private notification = inject(Notification);
   private transloco = inject(TranslocoService);
   private router = inject(Router);
 
-  // Reactive Form handling all inputs cleanly
-  uploadForm: FormGroup = this.fb.group({
-    title: ['', [Validators.required, Validators.minLength(2)]],
-    language: ['English', Validators.required],
-    text: [''],
+  // 1. Define the data model as a standard signal
+  uploadModel = signal({
+    title: '',
+    language: 'English',
+    text: '',
   });
 
-  // Signals for file management and async loading state
+  // 2. Initialize the Signal Form using form()
+  uploadForm = form(this.uploadModel, (schema) => {
+    // Optional: inline schema-based validation rules
+    required(schema.title, { message: 'Title is required' });
+    minLength(schema.title, 2, { message: 'Title must be at least 2 characters' });
+  });
+
   selectedFile = signal<File | null>(null);
   isUploading = signal(false);
   isDragOver = signal(false);
 
   languages = [
-    'English',
-    'Spanish',
-    'German',
-    'French',
-    'Italian',
-    'Portuguese',
-    'Turkish',
+    'English', 'Spanish', 'German', 'French', 'Italian', 'Portuguese', 'Turkish',
   ];
 
-  // --- Computed Signals for Robust Button Validation ---
-  isTitleValid = computed(() => {
-    const ctrl = this.uploadForm.get('title');
-    return !!ctrl?.valid && !!ctrl?.value?.trim();
+  // 3. Clean computed states tracking the form model and files
+  isDocValid = computed(() => {
+    return this.uploadForm.title().valid() && this.selectedFile() !== null;
   });
 
-  isDocValid = computed(() => this.isTitleValid() && this.selectedFile() !== null);
-
   isTextValid = computed(() => {
-    const textVal = this.uploadForm.get('text')?.value;
-    return this.isTitleValid() && !!textVal?.trim();
+    return this.uploadForm.title().valid() && !!this.uploadForm.text().value().trim();
   });
 
   onFileSelected(event: Event): void {
@@ -118,7 +113,7 @@ export class Upload {
   uploadDocument(): void {
     if (!this.isDocValid() || this.isUploading()) return;
 
-    const { title, language } = this.uploadForm.value;
+    const { title, language } = this.uploadForm().value(); // Get current value directly from form signal
     const file = this.selectedFile()!;
 
     this.isUploading.set(true);
@@ -134,7 +129,7 @@ export class Upload {
   uploadText(): void {
     if (!this.isTextValid() || this.isUploading()) return;
 
-    const { title, language, text } = this.uploadForm.value;
+    const { title, language, text } = this.uploadForm().value();
 
     this.isUploading.set(true);
     this.contentApi.uploadText({ title, language, text }).subscribe({

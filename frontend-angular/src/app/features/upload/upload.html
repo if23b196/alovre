@@ -8,17 +8,17 @@
       <mat-card-title>{{ t('upload.title') }}</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content class="form-content" [formGroup]="uploadForm">
-      <!-- Title Input -->
+    <mat-card-content class="form-content">
+      <!-- Title Input using [formField] -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ t('upload.contentName') }}</mat-label>
-        <input matInput formControlName="title" required />
+        <input matInput [formField]="uploadForm.title"/>
       </mat-form-field>
 
       <!-- Language Select -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ t('upload.language') }}</mat-label>
-        <mat-select formControlName="language">
+        <mat-select [formField]="uploadForm.language">
           @for (lang of languages; track lang) {
             <mat-option [value]="lang">{{ lang }}</mat-option>
           }
@@ -93,7 +93,7 @@
               <textarea
                 matInput
                 rows="6"
-                formControlName="text"
+                [formField]="uploadForm.text"
               ></textarea>
             </mat-form-field>
 
