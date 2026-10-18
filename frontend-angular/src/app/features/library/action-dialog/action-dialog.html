@@ -1,0 +1,36 @@
+<div *transloco="let t" class="dialog-container">
+  <h2 mat-dialog-title class="dialog-title" [class.text-destructive]="data.mode === 'delete'">
+    <mat-icon [color]="data.confirmColor === 'warn' ? 'warn' : 'primary'">
+      {{ data.mode === 'edit' ? 'edit' : 'warning' }}
+    </mat-icon>
+    <span>{{ data.title }}</span>
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    @if (data.mode === 'edit') {
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          matInput
+          cdkFocusInitial
+          [(ngModel)]="value"
+          [placeholder]="data.placeholder || ''"
+          (keydown.enter)="confirm()"
+        />
+      </mat-form-field>
+    } @else {
+      <p class="dialog-message">{{ data.message }}</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button mat-dialog-close class="btn-secondary">{{ t('library.btnCancel') }}</button>
+    <button
+      mat-flat-button
+      [color]="data.confirmColor || 'primary'"
+      [disabled]="data.mode === 'edit' && !value().trim()"
+      (click)="confirm()"
+    >
+      {{ data.confirmText }}
+    </button>
+  </mat-dialog-actions>
+</div>

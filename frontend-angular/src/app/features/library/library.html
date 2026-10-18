@@ -1,1 +1,113 @@
-<p>library works!</p>
+<main class="page-container" *transloco="let t">
+  <mat-card appearance="outlined" class="library-card">
+    <mat-card-header class="library-header-row">
+      <div class="library-title-group">
+        <mat-card-title class="library-title">{{ t('library.title') }}</mat-card-title>
+        <span class="item-count">{{ itemCountLabel() }}</span>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="library-content">
+      <!-- Search Input -->
+      <mat-form-field appearance="outline" class="search-bar">
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [placeholder]="t('library.searchPlaceholder')"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </mat-form-field>
+
+      <!-- Empty State -->
+      @if (filteredItems().length === 0) {
+        <div class="empty-state">
+          <mat-icon class="empty-icon">description</mat-icon>
+          <p>{{ t('library.emptyState') }}</p>
+        </div>
+      } @else {
+        <!-- Standard HTML Table with Angular @for Loop -->
+        <div class="table-container">
+          <table class="standard-table">
+            <thead>
+            <tr>
+              <th>{{ t('library.colName') }}</th>
+              <th>{{ t('library.colType') }}</th>
+              <th>{{ t('library.colDate') }}</th>
+              <th>{{ t('library.colSize') }}</th>
+              <th>{{ t('library.colStatus') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (item of filteredItems(); track item.id) {
+                <tr
+                  class="library-row"
+                  [class.processing]="!item.ocrProcessed"
+                  (click)="openDocument(item)"
+                >
+                  <!-- Name Column -->
+                  <td>
+                    <div class="item-name">
+                      <mat-icon class="table-icon">
+                        {{ item.type === 'TEXT' ? 'segment' : 'description' }}
+                      </mat-icon>
+                      <span class="item-name-text">{{ item.title }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Type Column -->
+                  <td><span class="badge">{{ item.type }}</span></td>
+
+                  <!-- Date Column -->
+                  <td>{{ formatDate(item.uploadTimestamp) }}</td>
+
+                  <!-- Size Column -->
+                  <td>{{ formatSize(item.fileSize) }}</td>
+
+                  <!-- Status Column -->
+                  <td>
+                    @if (item.ocrProcessed) {
+                      <span class="status-ready">
+                        <mat-icon>check_circle</mat-icon>
+                        {{ t('library.statusReady') }}
+                      </span>
+                    } @else {
+                      <span class="status-processing">
+                        <mat-spinner diameter="16"></mat-spinner>
+                        {{ t('library.statusProcessing') }}
+                      </span>
+                    }
+                  </td>
+
+                  <!-- Actions Column -->
+                  <td class="action-cell" (click)="$event.stopPropagation()">
+                    @if (item.ocrProcessed) {
+                      <div class="action-buttons-wrapper">
+                        <button
+                          mat-icon-button
+                          [title]="t('library.btnEdit')"
+                          (click)="openEditDialog($event, item)"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          color="warn"
+                          [title]="t('library.btnDelete')"
+                          (click)="openDeleteDialog($event, item)"
+                        >
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</main>

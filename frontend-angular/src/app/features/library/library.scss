@@ -1,0 +1,213 @@
+.library-card {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
+
+.library-header-row {
+  padding-bottom: 1rem;
+}
+
+.library-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .library-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .item-count {
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+  }
+}
+
+.search-bar {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 1rem;
+}
+
+/* --- Angular Material Form Field Integration (Search Bar) --- */
+::ng-deep {
+  .library-card {
+    /* Rounded 1rem container shape token */
+    .mdc-text-field--outlined {
+      --mdc-outlined-text-field-container-shape: 1rem !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--input-background) !important;
+      border-radius: 1rem !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      align-items: center;
+    }
+
+    /* Prefix Search Icon Styling */
+    .mat-mdc-form-field-icon-prefix {
+      color: var(--muted-foreground) !important;
+      padding-right: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Outlined notch smooth 1rem corners */
+    .mdc-notched-outline__leading {
+      border-top-left-radius: 1rem !important;
+      border-bottom-left-radius: 1rem !important;
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__notch {
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__trailing {
+      border-top-right-radius: 1rem !important;
+      border-bottom-right-radius: 1rem !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    /* Text & Placeholder Colors */
+    .mat-mdc-input-element {
+      color: var(--foreground) !important;
+      font-family: var(--font-sans) !important;
+
+      &::placeholder {
+        color: var(--muted-foreground) !important;
+      }
+    }
+  }
+}
+
+/* --- Standard HTML Table Styling --- */
+.standard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin-top: 0.5rem;
+
+  th {
+    background-color: var(--secondary);
+    color: var(--foreground);
+    font-weight: 600;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted-foreground);
+    vertical-align: middle;
+  }
+}
+
+.library-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(.processing) {
+    background-color: var(--row-hover) !important;
+
+    .item-name-text {
+      color: var(--foreground);
+    }
+
+    .action-buttons-wrapper {
+      opacity: 1;
+    }
+  }
+
+  &.processing {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+}
+
+.item-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .table-icon {
+    color: var(--primary);
+  }
+
+  .item-name-text {
+    font-weight: 500;
+    color: var(--foreground);
+  }
+}
+
+.badge {
+  background-color: var(--secondary);
+  color: var(--foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-ready {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primary);
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.status-processing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+}
+
+.action-buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  gap: 1rem;
+  color: var(--muted-foreground);
+
+  .empty-icon {
+    font-size: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    color: var(--border);
+  }
+}
