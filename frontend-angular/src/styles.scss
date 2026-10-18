@@ -68,3 +68,10 @@ body {
   line-height: 1.5;
   min-height: 100vh;
 }
+
+/* Simple layout wrapper for feature pages */
+.page-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}

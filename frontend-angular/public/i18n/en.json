@@ -2,5 +2,25 @@
   "nav": {
     "upload": "Upload",
     "library": "Library"
+  },
+  "home": {
+    "heroTitle1": "Read what you love.",
+    "heroTitle2": "Learn a language naturally.",
+    "heroDesc": "Master a new language by immersing yourself in your own content. Upload PDFs, TXT files, or paste raw text, and let intelligent AI turn your favorite reading material into an interactive learning experience.",
+    "startUploading": "Start Uploading",
+    "viewLibrary": "View Library",
+    "translationTitle": "Contextual Translation",
+    "translationDesc": "Move beyond simple dictionary lookups. Get AI-powered translations and deep grammar explanations that help you truly understand nuances and master new vocabulary organically.",
+    "memoryTitle": "Visual Memory",
+    "memoryDesc": "Struggling to remember a word? Generate an image based on selected text. Creating visual associations is a proven way to lock new vocabulary into your long-term memory.",
+    "pronunciationTitle": "Perfect Pronunciation",
+    "pronunciationDesc": "Never guess how a word sounds. Use high-fidelity Text-to-Speech to hear the correct pronunciation, improving your listening skills and speaking confidence.",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "How do I navigate the platform?",
+    "faq1A": "The navigation bar at the top is your control center. Click the alovre logo anytime to return home. Use Upload to add new material or Library to view your saved content.",
+    "faq2Q": "How do I upload new content?",
+    "faq2A": "Head to the Upload page. Provide a mandatory name, select the source language, and choose your format.",
+    "faq3Q": "Where can I manage my uploaded files?",
+    "faq3A": "Your Library displays all uploads in a structured table. You can search by name, delete old content or rename your files."
   }
 }

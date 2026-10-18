@@ -1,1 +1,101 @@
-<p>home works!</p>
+<main class="home-container" *transloco="let t">
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <h1>{{ t('home.heroTitle1') }}<br>{{ t('home.heroTitle2') }}</h1>
+    <p>{{ t('home.heroDesc') }}</p>
+    <div class="hero-actions">
+      <a mat-flat-button color="primary" routerLink="/upload" class="btn-primary">
+        <mat-icon>cloud_upload</mat-icon> {{ t('home.startUploading') }}
+      </a>
+      <a mat-stroked-button routerLink="/library" class="btn-secondary">
+        <mat-icon>local_library</mat-icon> {{ t('home.viewLibrary') }}
+      </a>
+    </div>
+  </header>
+
+  <!-- Features Grid -->
+  <div class="features-grid">
+    <mat-card appearance="outlined" class="feature-card">
+      <mat-card-header>
+        <div mat-card-avatar class="feature-icon-wrapper">
+          <mat-icon>translate</mat-icon>
+        </div>
+        <mat-card-title>{{ t('home.translationTitle') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ t('home.translationDesc') }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="feature-card">
+      <mat-card-header>
+        <div mat-card-avatar class="feature-icon-wrapper">
+          <mat-icon>image</mat-icon>
+        </div>
+        <mat-card-title>{{ t('home.memoryTitle') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ t('home.memoryDesc') }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="feature-card">
+      <mat-card-header>
+        <div mat-card-avatar class="feature-icon-wrapper">
+          <mat-icon>volume_up</mat-icon>
+        </div>
+        <mat-card-title>{{ t('home.pronunciationTitle') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ t('home.pronunciationDesc') }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2 class="section-title">{{ t('home.faqTitle') }}</h2>
+
+    <div class="faq-grid">
+      <mat-card appearance="outlined" class="faq-item">
+        <details>
+          <summary>
+            <span>{{ t('home.faq1Q') }}</span>
+            <mat-icon class="faq-icon">expand_more</mat-icon>
+          </summary>
+          <div class="faq-content">
+            <p>{{ t('home.faq1A') }}</p>
+          </div>
+        </details>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="faq-item">
+        <details>
+          <summary>
+            <span>{{ t('home.faq2Q') }}</span>
+            <mat-icon class="faq-icon">expand_more</mat-icon>
+          </summary>
+          <div class="faq-content">
+            <p>{{ t('home.faq2A') }}</p>
+          </div>
+        </details>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="faq-item">
+        <details>
+          <summary>
+            <span>{{ t('home.faq3Q') }}</span>
+            <mat-icon class="faq-icon">expand_more</mat-icon>
+          </summary>
+          <div class="faq-content">
+            <p>{{ t('home.faq3A') }}</p>
+          </div>
+        </details>
+      </mat-card>
+    </div>
+  </section>
+
+  <div class="tech-badge">
+    <mat-icon>auto_awesome</mat-icon> Powered by Google AI Services
+  </div>
+</main>
