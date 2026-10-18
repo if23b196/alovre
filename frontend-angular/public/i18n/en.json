@@ -50,5 +50,30 @@
     "btnUploadText": "Upload Text",
     "onlyPdfTxt": "Only PDF and TXT files are allowed.",
     "uploadSuccess": "Content uploaded successfully!"
+  },
+  "library": {
+    "title": "Your Library",
+    "itemCount_zero": "0 items",
+    "itemCount_one": "1 item",
+    "itemCount_other": "{{ count }} items",
+    "searchPlaceholder": "Search your library...",
+    "emptyState": "No documents uploaded yet. Upload your first document to get started.",
+    "colName": "Name",
+    "colType": "Type",
+    "colDate": "Date",
+    "colSize": "Size",
+    "colStatus": "Status",
+    "statusReady": "Ready",
+    "statusProcessing": "Processing",
+    "btnEdit": "Edit Name",
+    "btnDelete": "Delete",
+    "editModalTitle": "Edit Content Name",
+    "editModalPlaceholder": "Enter new name...",
+    "deleteModalTitle": "Delete Content",
+    "deleteConfirmText": "Are you sure you want to delete \"{{ title }}\"? This cannot be undone.",
+    "btnCancel": "Cancel",
+    "btnSave": "Save Changes",
+    "updateSuccess": "Content name updated successfully!",
+    "deleteSuccess": "Content deleted successfully!"
   }
 }
