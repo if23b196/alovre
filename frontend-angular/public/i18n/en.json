@@ -22,5 +22,22 @@
     "faq2A": "Head to the Upload page. Provide a mandatory name, select the source language, and choose your format.",
     "faq3Q": "Where can I manage my uploaded files?",
     "faq3A": "Your Library displays all uploads in a structured table. You can search by name, delete old content or rename your files."
+  },
+  "errors": {
+    "serverUnavailable": "Unable to connect to backend server.",
+    "generic": "An unexpected error occurred."
+  },
+  "upload": {
+    "title": "Upload Content",
+    "contentName": "Content Name",
+    "language": "Content Language",
+    "tabDocument": "Document",
+    "tabText": "Plain Text",
+    "dropzoneText": "Click to upload or drag and drop",
+    "dropzoneHint": "PDF, TXT files",
+    "btnUploadDocument": "Upload Document",
+    "btnUploadText": "Upload Text",
+    "onlyPdfTxt": "Only PDF and TXT files are allowed.",
+    "uploadSuccess": "Content uploaded successfully!"
   }
 }

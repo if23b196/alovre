@@ -1,3 +1,6 @@
+/* Include Angular Material core and prebuilt theme styles */
+@import '@angular/material/prebuilt-themes/azure-blue.css'; /* Or whichever prebuilt theme you like */
+
 /* --- Global Theme Variables --- */
 :root {
   --font-size: 16px;

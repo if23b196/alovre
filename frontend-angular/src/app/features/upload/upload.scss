@@ -1,0 +1,206 @@
+.upload-container {
+  max-width: 820px; /* Increased from 680px to make the form wider */
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.upload-card {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  overflow: hidden;
+
+  mat-card-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 1rem;
+  }
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.tab-icon {
+  margin-right: 0.5rem;
+}
+
+.tab-body {
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- Angular Material Form Field Integration --- */
+::ng-deep {
+  .upload-card {
+    /* Set the modern container shape token */
+    .mdc-text-field--outlined {
+      --mdc-outlined-text-field-container-shape: 1rem !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--input-background) !important;
+      border-radius: 1rem !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      align-items: center;
+    }
+
+    /* Force the outline structural corners to match the 1rem curve cleanly */
+    .mdc-notched-outline__leading {
+      border-top-left-radius: 1rem !important; /* Fixed back to 1rem for symmetric rounding */
+      border-bottom-left-radius: 1rem !important;
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__notch {
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__trailing {
+      border-top-right-radius: 1rem !important;
+      border-bottom-right-radius: 1rem !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    .mat-mdc-input-element,
+    .mat-mdc-select-value-text,
+    .mat-mdc-floating-label {
+      color: var(--foreground) !important;
+      font-family: var(--font-sans) !important;
+    }
+  }
+
+  /* --- Material Tabs Warm Theme Customization --- */
+  .mat-mdc-tab-header {
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  .mat-mdc-tab .mdc-tab__text-label {
+    color: var(--muted-foreground) !important;
+    font-weight: 600 !important;
+    font-family: var(--font-sans) !important;
+  }
+
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: var(--primary) !important;
+  }
+
+  .mdc-tab-indicator__content--underline {
+    border-color: var(--primary) !important;
+    border-top-width: 3px !important;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+}
+
+/* --- Dropzone Styling --- */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 1.25rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--input-background);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover, &.drag-over {
+    border-color: var(--primary);
+    background-color: var(--secondary);
+  }
+
+  .dropzone-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .dropzone-title {
+    font-weight: 600;
+    color: var(--foreground);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .dropzone-hint {
+    font-size: 0.9rem;
+    color: var(--muted-foreground);
+  }
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* --- Selected File Preview --- */
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background-color: var(--input-background);
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .file-name {
+      font-weight: 600;
+      color: var(--foreground);
+    }
+  }
+}
+
+/* --- Submit Action Button --- */
+.submit-btn {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-radius: 1rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  width: 100%;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Tighten spacing under form fields inside tabs to match dropzone */
+.tab-body {
+  .mat-mdc-form-field {
+    margin-bottom: -1rem;
+  }
+}

@@ -1,1 +1,115 @@
-<p>upload works!</p>
+<main class="upload-container" *transloco="let t">
+  <mat-card appearance="outlined" class="upload-card">
+    @if (isUploading()) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+
+    <mat-card-header>
+      <mat-card-title>{{ t('upload.title') }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="form-content" [formGroup]="uploadForm">
+      <!-- Title Input -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ t('upload.contentName') }}</mat-label>
+        <input matInput formControlName="title" required />
+      </mat-form-field>
+
+      <!-- Language Select -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ t('upload.language') }}</mat-label>
+        <mat-select formControlName="language">
+          @for (lang of languages; track lang) {
+            <mat-option [value]="lang">{{ lang }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Tabs: Document vs Text -->
+      <mat-tab-group animationDuration="200ms">
+        <!-- Tab 1: Document Upload -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">description</mat-icon>
+            {{ t('upload.tabDocument') }}
+          </ng-template>
+
+          <div class="tab-body">
+            @if (!selectedFile()) {
+              <div
+                class="dropzone"
+                [class.drag-over]="isDragOver()"
+                (click)="fileInput.click()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave()"
+                (drop)="onDrop($event)"
+              >
+                <input
+                  #fileInput
+                  type="file"
+                  class="hidden-input"
+                  accept=".pdf,.txt"
+                  (change)="onFileSelected($event)"
+                />
+                <mat-icon class="dropzone-icon">cloud_upload</mat-icon>
+                <p class="dropzone-title">{{ t('upload.dropzoneText') }}</p>
+                <span class="dropzone-hint">{{ t('upload.dropzoneHint') }}</span>
+              </div>
+            } @else {
+              <div class="file-preview">
+                <div class="file-info">
+                  <mat-icon color="primary">description</mat-icon>
+                  <span class="file-name">{{ selectedFile()?.name }}</span>
+                </div>
+                <button mat-icon-button color="warn" (click)="removeFile()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            }
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="submit-btn"
+              [disabled]="!isDocValid() || isUploading()"
+              (click)="uploadDocument()"
+            >
+              <mat-icon>upload</mat-icon>
+              {{ t('upload.btnUploadDocument') }}
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- Tab 2: Plain Text Upload -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">segment</mat-icon>
+            {{ t('upload.tabText') }}
+          </ng-template>
+
+          <div class="tab-body">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ t('upload.tabText') }}</mat-label>
+              <textarea
+                matInput
+                rows="6"
+                formControlName="text"
+              ></textarea>
+            </mat-form-field>
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="submit-btn"
+              [disabled]="!isTextValid() || isUploading()"
+              (click)="uploadText()"
+            >
+              <mat-icon>upload</mat-icon>
+              {{ t('upload.btnUploadText') }}
+            </button>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</main>
