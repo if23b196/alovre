@@ -7,7 +7,7 @@ export class Notification {
 
   show(message: string, isError = false): void {
     this.snackBar.open(message, 'Close', {
-      duration: 3500,
+      duration: 4000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: isError ? ['snackbar-error'] : ['snackbar-info'],

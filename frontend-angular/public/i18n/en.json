@@ -23,8 +23,19 @@
     "faq3Q": "Where can I manage my uploaded files?",
     "faq3A": "Your Library displays all uploads in a structured table. You can search by name, delete old content or rename your files."
   },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish",
+    "german": "German",
+    "french": "French",
+    "italian": "Italian",
+    "portuguese": "Portuguese",
+    "turkish": "Turkish"
+  },
   "errors": {
-    "serverUnavailable": "Unable to connect to backend server.",
+    "serverUnavailable": "Unable to connect to the backend server. Is Spring Boot running?",
+    "clientError": "Invalid request. Please check your input values.",
+    "serverError": "Internal server error. Please try again later.",
     "generic": "An unexpected error occurred."
   },
   "upload": {
