@@ -1,6 +1,6 @@
 <div *transloco="let t" class="dialog-container">
   <h2 mat-dialog-title class="dialog-title" [class.text-destructive]="data.mode === 'delete'">
-    <mat-icon [color]="data.confirmColor === 'warn' ? 'warn' : 'primary'">
+    <mat-icon>
       {{ data.mode === 'edit' ? 'edit' : 'warning' }}
     </mat-icon>
     <span>{{ data.title }}</span>
@@ -23,10 +23,11 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end" class="dialog-actions">
-    <button mat-button mat-dialog-close class="btn-secondary">{{ t('library.btnCancel') }}</button>
+    <button mat-button mat-dialog-close class="btn-cancel">{{ t('library.btnCancel') }}</button>
     <button
       mat-flat-button
-      [color]="data.confirmColor || 'primary'"
+      [class.btn-destructive]="data.mode === 'delete'"
+      [class.btn-primary]="data.mode !== 'delete'"
       [disabled]="data.mode === 'edit' && !value().trim()"
       (click)="confirm()"
     >
