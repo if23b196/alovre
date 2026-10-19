@@ -98,7 +98,7 @@ export class Library implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Poll backend for updates (note: if backend is connected, this will overwrite mocks with real data)
-    this.pollSub = timer(0, 60000)
+    this.pollSub = timer(0, 300000)
       .pipe(
         switchMap(() =>
           this.contentApi.getLibraryItems().pipe(

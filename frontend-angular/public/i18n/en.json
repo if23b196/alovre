@@ -74,5 +74,34 @@
     "btnSave": "Save Changes",
     "updateSuccess": "Content name updated successfully!",
     "deleteSuccess": "Content deleted successfully!"
+  },
+  "reader": {
+    "backToLibrary": "Back to Library",
+    "loadingTitle": "Loading document...",
+    "selectedLabel": "Selected",
+    "selectPrompt": "Select a word from the text on the left side to use AI tools!",
+    "translateBtn": "Translate & Explain",
+    "imageBtn": "Image",
+    "audioBtn": "Pronounce",
+    "translateEmpty": "No translations yet",
+    "imageEmpty": "No images yet",
+    "audioEmpty": "No audio yet",
+    "btnPlay": "Play",
+    "errors": {
+      "noId": "No document ID provided",
+      "fetchFailed": "Failed to load document content",
+      "selectWordFirst": "Please select a word first.",
+      "translationFailed": "Translation failed",
+      "imageFailed": "Image generation failed",
+      "audioFailed": "Audio generation failed"
+    },
+    "toasts": {
+      "translating": "Translating...",
+      "generatingImage": "Generating image...",
+      "generatingAudio": "Generating audio...",
+      "translationReady": "Translation ready!",
+      "imageReady": "Image ready!",
+      "audioReady": "Audio ready!"
+    }
   }
 }

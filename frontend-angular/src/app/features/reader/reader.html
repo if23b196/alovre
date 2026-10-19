@@ -1,0 +1,222 @@
+<main class="reader-layout" *transloco="let t">
+  <!-- Left Content Panel -->
+  <section class="content-panel">
+    <div class="reader-header">
+      <a routerLink="/library" class="btn-icon" [title]="t('reader.backToLibrary')">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <h2 class="reader-title">{{ documentTitle() || t('reader.loadingTitle') }}</h2>
+    </div>
+
+    <div class="reader-body card">
+      <div
+        id="text-content"
+        class="text-content"
+        (click)="onTextClick($event)"
+        [innerHTML]="getFormattedParagraphs()"
+      ></div>
+    </div>
+  </section>
+
+  <!-- Right AI Tools Panel -->
+  <section class="tools-panel">
+    <!-- Selected Word Display Box -->
+    <div class="selected-word-display card">
+      @if (selectedWord()) {
+        <p class="text-muted">
+          {{ t('reader.selectedLabel') }}:
+          <strong class="highlighted-word">{{ selectedWord() }}</strong>
+        </p>
+      } @else {
+        <p class="text-muted">{{ t('reader.selectPrompt') }}</p>
+      }
+    </div>
+
+    <!-- 1. Translate & Explain Tool -->
+    <div class="tool-card card">
+      <div class="tool-header-row">
+        <div class="tool-group">
+          <button
+            mat-flat-button
+            class="tool-trigger-btn"
+            [disabled]="!hasSelection()"
+            (click)="explainWord()"
+          >
+            <mat-icon>translate</mat-icon> {{ t('reader.translateBtn') }}
+          </button>
+
+          <mat-form-field appearance="outline" class="language-picker-field">
+            <mat-select [(ngModel)]="targetLanguage">
+              <mat-option value="English">English</mat-option>
+              <mat-option value="Spanish">Español</mat-option>
+              <mat-option value="German">Deutsch</mat-option>
+              <mat-option value="French">Français</mat-option>
+              <mat-option value="Italian">Italiano</mat-option>
+              <mat-option value="Portuguese">Português</mat-option>
+              <mat-option value="Turkish">Türkçe</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        @if (translateState().history.length > 0) {
+          <div class="pagination">
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="translateState().currentIndex === 0"
+              (click)="movePage('translate', -1)"
+            >
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="page-counter">
+              {{ translateState().currentIndex + 1 }} / {{ translateState().history.length }}
+            </span>
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="translateState().currentIndex === translateState().history.length - 1"
+              (click)="movePage('translate', 1)"
+            >
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      @if (translateState().history.length > 0) {
+        <div class="word-badge">
+          <mat-icon class="badge-icon">tag</mat-icon>
+          <span>{{ translateState().history[translateState().currentIndex].word }}</span>
+        </div>
+      }
+
+      <div class="tool-content">
+        @if (translateState().history.length === 0) {
+          <div class="result-area empty">{{ t('reader.translateEmpty') }}</div>
+        } @else {
+          <div class="result-area">
+            <p class="text-left-align">
+              {{ translateState().history[translateState().currentIndex].result }}
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 2. Image Generation Tool -->
+    <div class="tool-card card">
+      <div class="tool-header-row">
+        <div class="tool-group">
+          <button
+            mat-flat-button
+            class="tool-trigger-btn"
+            [disabled]="!hasSelection()"
+            (click)="generateImage()"
+          >
+            <mat-icon>image</mat-icon> {{ t('reader.imageBtn') }}
+          </button>
+
+          @if (imageState().history.length > 0) {
+            <div class="word-badge">
+              <mat-icon class="badge-icon">tag</mat-icon>
+              <span>{{ imageState().history[imageState().currentIndex].word }}</span>
+            </div>
+          }
+        </div>
+
+        @if (imageState().history.length > 0) {
+          <div class="pagination">
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="imageState().currentIndex === 0"
+              (click)="movePage('image', -1)"
+            >
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="page-counter">
+              {{ imageState().currentIndex + 1 }} / {{ imageState().history.length }}
+            </span>
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="imageState().currentIndex === imageState().history.length - 1"
+              (click)="movePage('image', 1)"
+            >
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      <div class="tool-content">
+        @if (imageState().history.length === 0) {
+          <div class="result-area empty">{{ t('reader.imageEmpty') }}</div>
+        } @else {
+          <div class="result-area">
+            <img
+              [src]="imageState().history[imageState().currentIndex].result"
+              class="generated-image"
+              alt="AI Generated Visual"
+            />
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 3. Text-to-Speech Pronunciation Tool -->
+    <div class="tool-card card">
+      <div class="tool-header-row">
+        <button
+          mat-flat-button
+          class="tool-trigger-btn"
+          [disabled]="!hasSelection()"
+          (click)="generateAudio()"
+        >
+          <mat-icon>volume_up</mat-icon> {{ t('reader.audioBtn') }}
+        </button>
+
+        @if (audioState().history.length > 0) {
+          <div class="pagination">
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="audioState().currentIndex === 0"
+              (click)="movePage('audio', -1)"
+            >
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="page-counter">
+              {{ audioState().currentIndex + 1 }} / {{ audioState().history.length }}
+            </span>
+            <button
+              mat-icon-button
+              class="page-btn"
+              [disabled]="audioState().currentIndex === audioState().history.length - 1"
+              (click)="movePage('audio', 1)"
+            >
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      <div class="tool-content">
+        @if (audioState().history.length === 0) {
+          <div class="result-area empty">{{ t('reader.audioEmpty') }}</div>
+        } @else {
+          <div class="result-area">
+            <button
+              mat-stroked-button
+              class="generated-audio-btn"
+              (click)="playAudio(audioState().history[audioState().currentIndex].result)"
+            >
+              <mat-icon>play_circle</mat-icon>
+              {{ t('reader.btnPlay') }} "{{ audioState().history[audioState().currentIndex].word }}"
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</main>

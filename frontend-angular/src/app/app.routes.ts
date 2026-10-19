@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/library/library').then((m) => m.Library),
   },
   {
+    path: 'reader/:id',
+    loadComponent: () => import('./features/reader/reader').then((m) => m.Reader),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

@@ -18,6 +18,13 @@ export interface ContentItem {
   ocrProcessed: boolean;
 }
 
+export interface ContentDetail extends ContentItem {
+  textContent?: string;
+  annotations?: Array<{ selectedText: string; generatedText: string }>;
+  images?: Array<{ selectedText: string; minioObjectKey: string }>;
+  audios?: Array<{ text: string; minioObjectKey: string }>;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ContentApi {
   private http = inject(HttpClient);
@@ -38,6 +45,10 @@ export class ContentApi {
 
   getLibraryItems(): Observable<ContentItem[]> {
     return this.http.get<ContentItem[]>(this.baseUrl);
+  }
+
+  getContent(id: string): Observable<ContentDetail> {
+    return this.http.get<ContentDetail>(`${this.baseUrl}/${id}`);
   }
 
   updateContentTitle(id: string, title: string): Observable<void> {

@@ -1,0 +1,316 @@
+/* --- Reader Page Viewport Layout --- */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 70px); /* Adjust based on navbar height */
+  overflow: hidden;
+  background-color: var(--background);
+}
+
+.reader-layout {
+  display: flex;
+  gap: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Scrollable Panels --- */
+.content-panel {
+  flex: 6;
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 0.5rem;
+}
+
+.tools-panel {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 0.5rem;
+}
+
+/* Custom Scrollbar Styling */
+.content-panel::-webkit-scrollbar,
+.tools-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-panel::-webkit-scrollbar-track,
+.tools-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-panel::-webkit-scrollbar-thumb,
+.tools-panel::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 10px;
+
+  &:hover {
+    background-color: var(--primary);
+  }
+}
+
+/* --- Reader Header --- */
+.reader-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  background: var(--secondary);
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--border);
+  }
+}
+
+.reader-title {
+  font-size: 1.5rem;
+  color: var(--foreground);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* --- Card Base Styling --- */
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* --- Content Panel Body & Interactive Words --- */
+.reader-body {
+  padding: 2.5rem;
+  line-height: 2.2;
+  font-size: 1.1rem;
+  color: var(--foreground);
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+::ng-deep {
+  .word {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    padding: 0 0.15rem;
+    margin: 0 -0.15rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background-color: var(--secondary);
+      color: var(--foreground);
+    }
+
+    &.selected {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &.instance-highlight {
+      background-color: var(--secondary);
+      border-bottom: 2px dashed var(--primary);
+    }
+  }
+}
+
+/* --- Right Tools Panel Styles --- */
+.selected-word-display {
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+
+  .text-muted {
+    color: var(--muted-foreground);
+    margin: 0;
+  }
+
+  .highlighted-word {
+    color: var(--primary);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+}
+
+.tool-card {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tool-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.tool-trigger-btn {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-radius: 0.75rem !important;
+  font-weight: 500;
+}
+
+/* --- Language Picker Form Field Integration --- */
+.language-picker-field {
+  width: 140px;
+  margin-bottom: -1.25rem; /* Vertically aligns mat-form-field with trigger buttons */
+
+  ::ng-deep {
+    /* Set modern container shape token to match Upload page */
+    .mdc-text-field--outlined {
+      --mdc-outlined-text-field-container-shape: 1rem !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--input-background) !important;
+      border-radius: 1rem !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      align-items: center;
+      height: 40px;
+    }
+
+    /* Force the outline structural corners to match the 1rem curve cleanly */
+    .mdc-notched-outline__leading {
+      border-top-left-radius: 1rem !important;
+      border-bottom-left-radius: 1rem !important;
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__notch {
+      border-color: var(--border) !important;
+    }
+
+    .mdc-notched-outline__trailing {
+      border-top-right-radius: 1rem !important;
+      border-bottom-right-radius: 1rem !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      border-color: var(--border) !important;
+    }
+
+    /* Text & Select Value Styling */
+    .mat-mdc-select-value-text {
+      color: var(--foreground) !important;
+      font-family: var(--font-sans) !important;
+      font-size: 0.9rem !important;
+      font-weight: 500 !important;
+    }
+
+    .mat-mdc-select-arrow {
+      color: var(--muted-foreground) !important;
+    }
+  }
+}
+
+/* --- Pagination Controls --- */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .page-counter {
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .page-btn {
+    color: var(--foreground);
+  }
+}
+
+/* --- Word Badges --- */
+.word-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--secondary);
+  color: var(--foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: fit-content;
+
+  .badge-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--primary);
+  }
+}
+
+/* --- Result Areas --- */
+.tool-content {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.result-area {
+  font-size: 0.95rem;
+  color: var(--foreground);
+  line-height: 1.6;
+
+  &.empty {
+    color: var(--muted-foreground);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .generated-image {
+    width: 100%;
+    border-radius: 0.75rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .generated-audio-btn {
+    width: 100%;
+    border-radius: 0.75rem !important;
+    border-color: var(--border) !important;
+    color: var(--foreground) !important;
+    background-color: var(--secondary) !important;
+    font-weight: 500;
+  }
+}
