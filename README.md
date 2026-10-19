@@ -1,3 +1,5 @@
+> **Experimental Note**: The Angular frontend code included in this repository is a private, experimental addition used to explore Angular features. It is **not** part of the bachelor thesis, is not fully tested, and may not work as expected.
+
 # Alovre
 
 Your second-language reading app with helpful AI features. **Alovre** helps users read content in a foreign language by providing instant translations, context-aware image generation for vocabulary, and text-to-speech (TTS) pronunciation using Google Gemini AI.
