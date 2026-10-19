@@ -69,7 +69,7 @@ export class Library implements OnInit, OnDestroy {
     {
       id: 'mock-3',
       title: 'Scanned Document (OCR Processing)',
-      type: 'PDF',
+      type: 'TXT',
       language: 'German',
       uploadTimestamp: [2026, 6, 18],
       fileSize: 5242880, // 5.0 MB
@@ -92,7 +92,6 @@ export class Library implements OnInit, OnDestroy {
   // Computed item count label formatting based on length
   itemCountLabel = computed(() => {
     const count = this.allItems().length;
-    if (count === 0) return this.transloco.translate('library.itemCount_zero');
     if (count === 1) return this.transloco.translate('library.itemCount_one');
     return this.transloco.translate('library.itemCount_other', { count });
   });
